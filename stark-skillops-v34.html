@@ -1,0 +1,1882 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STARK SKILL/OPS — Stark Marketing</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Stark Marketing — azul marinho premium + dourado âmbar */
+  --bg:#060d1a;--bg2:#091222;--bg3:#0d1a2e;--bg4:#122038;--bg5:#172641;
+  --b1:#1a2d4a;--b2:#1f3860;--b3:#274878;
+  --t1:#dce8f5;--t2:#7a9bc0;--t3:#3a5478;--t4:#1d3050;
+  --acc:#c9971a;--acc2:#a67810;--acc3:#e8b830;
+  --grn:#2ecc71;--grn2:#1a7a42;--grn3:#0d4a28;
+  --red:#e74c3c;--red2:#8b2a20;--red3:#4a1510;
+  --blu:#4a9fd4;--blu2:#1e5a8e;--blu3:#0f2f4d;
+  --pur:#9b59b6;--pur2:#4a2360;
+  --tel:#1abc9c;--tel2:#0e6b56;
+  --cyn:#4ab8d8;--cyn2:#1a6e8e;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'IBM Plex Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--t1);font-family:var(--sans);font-size:13px;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.022) 3px,rgba(0,0,0,.022) 4px);pointer-events:none;z-index:9000;}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(26,56,96,.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(201,151,26,.04) 0%,transparent 50%);pointer-events:none;z-index:0;}
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--b3);border-radius:2px;}
+
+/* ── HEADER ── */
+.hdr{background:var(--bg2);border-bottom:1px solid var(--b1);padding:0 16px;height:50px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:200;}
+.logo{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--acc);letter-spacing:.1em;display:flex;align-items:center;gap:8px;}
+.logo-v{font-size:9px;color:var(--t3);font-weight:400;border:1px solid var(--b2);padding:2px 6px;border-radius:2px;}
+.hdr-sep{width:1px;height:22px;background:var(--b2);flex-shrink:0;}
+
+/* Mode toggle */
+.mode-toggle{display:flex;background:var(--bg4);border:1px solid var(--b2);border-radius:3px;padding:2px;gap:2px;}
+.mode-btn{font-family:var(--mono);font-size:9px;padding:4px 12px;border-radius:2px;border:none;cursor:pointer;transition:all .15s;letter-spacing:.05em;background:transparent;color:var(--t3);}
+.mode-btn.on.colaborador{background:rgba(59,130,246,.15);color:var(--blu);}
+.mode-btn.on.controlador{background:rgba(232,160,32,.15);color:var(--acc);}
+.mode-btn:not(.on):hover{color:var(--t2);}
+
+.sb-pill{font-family:var(--mono);font-size:9px;padding:3px 9px;border-radius:2px;border:1px solid;display:flex;align-items:center;gap:5px;cursor:pointer;transition:all .15s;}
+.sb-pill.disconnected{border-color:var(--red2);color:var(--red);background:rgba(231,76,60,.07);}
+.sb-pill.connected{border-color:var(--grn2);color:var(--grn);background:rgba(46,204,113,.07);}
+.sb-pill.syncing{border-color:var(--acc2);color:var(--acc);background:rgba(232,160,32,.07);}
+.sb-dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+.hdr-r{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.clock{font-family:var(--mono);font-size:11px;color:var(--t3);}
+.ubadge{font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:2px;cursor:pointer;border:1px solid;transition:all .15s;}
+.ubadge.gustavo{background:rgba(232,160,32,.08);border-color:var(--acc2);color:var(--acc);}
+.ubadge.amanda{background:rgba(59,130,246,.08);border-color:var(--blu2);color:var(--blu);}
+.ubadge.on{box-shadow:0 0 0 1px currentColor;}
+
+/* ── LAYOUT ── */
+.main{display:grid;grid-template-columns:240px 1fr 280px;min-height:calc(100vh - 50px);position:relative;z-index:1;}
+/* Em modo controlador, sem painel direito separado */
+.main.ctrl-mode{grid-template-columns:240px 1fr;}
+
+/* ── SIDEBAR ── */
+.sidebar{background:var(--bg2);border-right:1px solid var(--b1);overflow-y:auto;position:sticky;top:50px;max-height:calc(100vh - 50px);}
+.sb-sec{border-bottom:1px solid var(--b1);padding:14px;}
+.sb-ttl{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.18em;color:var(--t3);margin-bottom:10px;}
+.sk-item{display:flex;flex-direction:column;gap:3px;padding:8px 10px;border-radius:3px;cursor:pointer;transition:all .1s;margin-bottom:2px;border:1px solid transparent;}
+.sk-item:hover{background:var(--bg3);}
+.sk-item.sel{background:var(--bg4);border-color:var(--b2);}
+.sk-row{display:flex;align-items:center;gap:8px;}
+.sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.sd-pending{background:var(--t4);}
+.sd-active{background:var(--acc);box-shadow:0 0 8px var(--acc);}
+.sd-review{background:var(--blu);box-shadow:0 0 8px var(--blu);}
+.sd-approved{background:var(--grn);box-shadow:0 0 8px var(--grn);}
+.sd-blocked{background:var(--red);}
+.sd-paused{background:var(--pur);}
+.sk-cmd{font-family:var(--mono);font-size:10px;color:var(--t1);flex:1;}
+.sk-cyc{font-family:var(--mono);font-size:9px;color:var(--t3);}
+.mini-bar{height:2px;background:var(--bg5);border-radius:1px;overflow:hidden;margin-top:1px;}
+.mini-fill{height:100%;border-radius:1px;transition:width .4s;}
+.rule-block{display:flex;gap:7px;margin-bottom:8px;font-size:10px;line-height:1.55;color:var(--t2);}
+.rule-icon{color:var(--acc);font-family:var(--mono);flex-shrink:0;margin-top:1px;}
+.leg-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:10px;color:var(--t2);}
+
+/* ── STATS BAR ── */
+.stats-bar{background:var(--bg2);border-bottom:1px solid var(--b1);padding:10px 16px;display:flex;gap:20px;align-items:center;}
+.stat{display:flex;flex-direction:column;gap:1px;}
+.stat-lbl{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.14em;color:var(--t3);}
+.stat-val{font-family:var(--mono);font-size:16px;font-weight:700;line-height:1;}
+.sv-acc{color:var(--acc);}.sv-grn{color:var(--grn);}.sv-blu{color:var(--blu);}.sv-red{color:var(--red);}.sv-t{color:var(--t1);}
+.stat-sep{width:1px;height:28px;background:var(--b1);}
+.sprint-wrap{flex:1;}
+.sprint-bar{display:flex;gap:2px;height:5px;margin-top:4px;}
+.sprint-seg{flex:1;border-radius:1px;background:var(--bg5);transition:background .3s;}
+.sprint-seg.done{background:var(--grn);}
+.sprint-seg.active{background:var(--acc);}
+
+/* ── CONTENT ── */
+.content{padding:16px;overflow-y:auto;background:var(--bg);}
+.empty-state{display:flex;align-items:center;justify-content:center;height:300px;flex-direction:column;gap:10px;color:var(--t3);}
+.empty-icon{font-family:var(--mono);font-size:28px;}
+.empty-txt{font-family:var(--mono);font-size:11px;}
+
+/* Tabs */
+.tabs{display:flex;border-bottom:1px solid var(--b1);margin-bottom:16px;}
+.tab{font-family:var(--mono);font-size:10px;padding:8px 14px;cursor:pointer;color:var(--t3);border-bottom:2px solid transparent;transition:all .15s;letter-spacing:.05em;white-space:nowrap;}
+.tab:hover{color:var(--t2);}
+.tab.on{color:var(--acc);border-bottom-color:var(--acc);}
+
+/* SK Header */
+.sk-hdr{background:var(--bg2);border:1px solid var(--b1);border-radius:4px;padding:14px 16px;margin-bottom:12px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.sk-title{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--acc);margin-bottom:4px;}
+.sk-meta{font-family:var(--mono);font-size:10px;color:var(--t3);display:flex;gap:12px;flex-wrap:wrap;}
+.sk-obj{font-size:11px;color:var(--t2);line-height:1.6;margin-top:6px;}
+.badge{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;padding:3px 8px;border-radius:2px;border:1px solid;white-space:nowrap;}
+.b-pending{color:var(--t3);border-color:var(--b2);}
+.b-active{color:var(--acc);border-color:var(--acc2);background:rgba(232,160,32,.1);}
+.b-review{color:var(--blu);border-color:var(--blu2);background:rgba(59,130,246,.1);}
+.b-approved{color:var(--grn);border-color:var(--grn2);background:rgba(46,204,113,.1);}
+.b-blocked{color:var(--red);border-color:var(--red2);background:rgba(231,76,60,.1);}
+.b-paused{color:var(--pur);border-color:var(--pur2);background:rgba(155,89,182,.1);}
+
+/* ClickUp Strip */
+.cu-strip{background:var(--bg3);border:1px solid var(--b1);border-left:2px solid var(--cyn2);border-radius:3px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.cu-lbl{font-family:var(--mono);font-size:9px;color:var(--cyn);text-transform:uppercase;letter-spacing:.1em;}
+.cu-inp{background:var(--bg5);border:1px solid var(--b2);border-radius:2px;color:var(--t1);font-family:var(--mono);font-size:11px;padding:5px 10px;width:220px;outline:none;}
+.cu-inp:focus{border-color:var(--cyn2);}
+.cu-btn{font-family:var(--mono);font-size:10px;padding:5px 12px;border-radius:2px;border:1px solid;cursor:pointer;transition:all .15s;}
+.cu-sync{border-color:var(--cyn2);background:rgba(0,212,255,.08);color:var(--cyn);}
+.cu-sync:hover{background:rgba(0,212,255,.16);}
+.cu-copy{border-color:var(--b3);background:transparent;color:var(--t3);}
+.cu-copy:hover{border-color:var(--acc);color:var(--acc);}
+.cu-status{font-family:var(--mono);font-size:10px;color:var(--t3);margin-left:auto;}
+.payload-panel{display:none;background:var(--bg4);border:1px solid var(--b2);border-radius:3px;padding:12px;margin-top:8px;position:relative;}
+.payload-panel.open{display:block;}
+.payload-code{font-family:var(--mono);font-size:10px;color:var(--tel);white-space:pre;overflow-x:auto;line-height:1.7;}
+.payload-copy-btn{position:absolute;top:8px;right:8px;font-family:var(--mono);font-size:9px;padding:3px 8px;border:1px solid var(--tel2);background:rgba(26,188,156,.1);color:var(--tel);border-radius:2px;cursor:pointer;}
+
+/* ── STEPS ── */
+.step{display:flex;gap:10px;position:relative;}
+.step:not(:last-child)::after{content:'';position:absolute;left:15px;top:32px;bottom:0;width:1px;background:var(--b1);}
+.step-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:600;flex-shrink:0;border:1px solid var(--b2);background:var(--bg3);color:var(--t3);position:relative;z-index:1;}
+.step-body{flex:1;padding:4px 0 18px;}
+.step-title{font-size:12px;font-weight:500;color:var(--t1);margin-bottom:4px;}
+.step-desc{font-size:11px;color:var(--t2);line-height:1.6;margin-bottom:8px;}
+.step-det{background:var(--bg3);border:1px solid var(--b1);border-radius:3px;padding:10px 12px;font-size:11px;color:var(--t2);line-height:1.7;}
+.step-det ul{padding-left:14px;}.step-det li{margin-bottom:3px;}
+.step-det strong{color:var(--t1);font-weight:500;}
+.step-det code{font-family:var(--mono);font-size:10px;color:var(--acc);background:rgba(232,160,32,.08);padding:1px 4px;border-radius:2px;}
+
+/* ── SELETOR DE GESTOR (colaborador) ── */
+.gestor-selector-bar{background:var(--bg2);border:1px solid var(--b1);border-radius:4px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:12px;}
+.gs-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;}
+.gs-sel{background:var(--bg4);border:1px solid var(--b2);border-radius:2px;color:var(--t1);font-family:var(--mono);font-size:12px;padding:6px 10px;outline:none;flex:1;max-width:220px;}
+.gs-sel:focus{border-color:var(--blu);}
+.gs-chip{font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:2px;border:1px solid var(--blu2);background:rgba(59,130,246,.08);color:var(--blu);}
+
+/* ── CHECKLIST DO COLABORADOR ── */
+.collab-checklist{display:flex;flex-direction:column;gap:6px;}
+.chk-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--bg3);border:1px solid var(--b1);border-radius:3px;cursor:pointer;transition:all .15s;user-select:none;}
+.chk-item:hover{background:var(--bg4);}
+.chk-item.done-item{border-color:var(--grn2);background:rgba(46,204,113,.05);}
+.chk-box{width:18px;height:18px;border:1px solid var(--b3);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--bg4);margin-top:1px;}
+.chk-box.done{background:rgba(46,204,113,.2);border-color:var(--grn2);}
+.chk-box.done::after{content:'✓';font-size:11px;color:var(--grn);font-weight:700;}
+.chk-lbl-wrap{}
+.chk-lbl{font-size:12px;font-weight:500;color:var(--t1);margin-bottom:2px;}
+.chk-lbl.done-lbl{color:var(--grn);text-decoration:line-through;opacity:.7;}
+.chk-sub{font-size:10px;color:var(--t2);line-height:1.4;}
+.collab-note-area{margin-top:12px;}
+.collab-note-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+.collab-ta{width:100%;background:var(--bg4);border:1px solid var(--b2);border-radius:2px;color:var(--t1);font-family:var(--mono);font-size:10px;padding:8px 10px;resize:vertical;min-height:70px;outline:none;line-height:1.5;}
+.collab-ta:focus{border-color:var(--blu);}
+.collab-save-btn{font-family:var(--mono);font-size:9px;padding:5px 14px;border:1px solid var(--blu2);background:rgba(59,130,246,.08);color:var(--blu);border-radius:2px;cursor:pointer;margin-top:6px;float:right;}
+.cycle-done-chip{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;color:var(--grn);background:rgba(46,204,113,.1);border:1px solid var(--grn2);padding:4px 10px;border-radius:2px;margin-top:10px;}
+
+/* ── DOD COLABORADOR ── */
+.dod-collab-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--b1);}
+.dod-collab-item:last-child{border-bottom:none;}
+.dod-chk{width:16px;height:16px;border:1px solid var(--b3);border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;background:var(--bg4);}
+.dod-chk.on{background:rgba(46,204,113,.15);border-color:var(--grn2);}
+.dod-chk.on::after{content:'✓';font-size:10px;color:var(--grn);font-weight:700;}
+.dod-text{font-size:11px;color:var(--t2);line-height:1.5;}
+.dod-sub{font-size:9px;color:var(--t3);font-family:var(--mono);margin-top:2px;}
+
+/* ── REGISTRO DE OUTPUT ── */
+.output-saved{background:var(--bg4);border:1px solid var(--grn2);border-left:3px solid var(--grn);border-radius:3px;padding:10px 12px;margin-bottom:10px;}
+.output-saved-hdr{font-family:var(--mono);font-size:9px;color:var(--grn);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.output-saved-body{font-size:11px;color:var(--t2);line-height:1.5;white-space:pre-wrap;word-break:break-word;}
+.output-area{display:flex;flex-direction:column;gap:8px;}
+.output-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;}
+.output-ta{width:100%;background:var(--bg4);border:1px solid var(--b2);border-radius:2px;color:var(--t1);font-family:var(--mono);font-size:10px;padding:8px 10px;resize:vertical;outline:none;line-height:1.5;}
+.output-ta:focus{border-color:var(--acc);}
+.output-ta.tall{min-height:100px;}
+.output-ta.short{min-height:60px;}
+.output-save-btn{font-family:var(--mono);font-size:10px;padding:7px 16px;border:1px solid var(--acc2);background:rgba(232,160,32,.08);color:var(--acc);border-radius:2px;cursor:pointer;transition:all .15s;align-self:flex-end;}
+.output-save-btn:hover{background:rgba(232,160,32,.16);}
+
+/* ── CONTROLADOR — PAINEL COMPARATIVO ── */
+.ctrl-panel{padding:16px;overflow-y:auto;background:var(--bg);}
+.ctrl-section{margin-bottom:20px;}
+.ctrl-section-ttl{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:var(--t3);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.ctrl-section-ttl::after{content:'';flex:1;height:1px;background:var(--b1);}
+
+/* Tabela comparativa de gestores */
+.progress-matrix{width:100%;border-collapse:collapse;font-size:11px;}
+.progress-matrix th{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);text-align:center;padding:6px 8px;border-bottom:1px solid var(--b1);white-space:nowrap;}
+.progress-matrix th:first-child{text-align:left;}
+.progress-matrix td{padding:7px 8px;border-bottom:1px solid rgba(30,37,53,.6);text-align:center;vertical-align:middle;}
+.progress-matrix tr:last-child td{border-bottom:none;}
+.progress-matrix tr:hover td{background:var(--bg3);}
+.g-name-cell{font-family:var(--mono);font-size:11px;color:var(--t1);text-align:left;}
+.prog-cell{display:flex;align-items:center;justify-content:center;}
+.prog-dot{width:14px;height:14px;border-radius:50%;border:1px solid;}
+.prog-dot.done{background:rgba(46,204,113,.2);border-color:var(--grn2);}
+.prog-dot.done::after{content:'✓';font-size:8px;color:var(--grn);font-weight:700;display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
+.prog-dot.none{background:var(--bg4);border-color:var(--b2);}
+.has-output-chip{font-family:var(--mono);font-size:8px;padding:2px 6px;border-radius:2px;background:rgba(26,188,156,.1);color:var(--tel);border:1px solid var(--tel2);}
+.no-output-chip{font-family:var(--mono);font-size:8px;padding:2px 6px;border-radius:2px;background:var(--bg4);color:var(--t3);border:1px solid var(--b2);}
+
+/* Skill card no controlador */
+.ctrl-sk-card{background:var(--bg2);border:1px solid var(--b1);border-radius:4px;margin-bottom:14px;overflow:hidden;}
+.ctrl-sk-card-hdr{padding:10px 14px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;}
+.ctrl-sk-card-hdr:hover{background:var(--bg3);}
+.ctrl-sk-name{font-family:var(--mono);font-size:12px;color:var(--acc);font-weight:600;}
+.ctrl-sk-meta{display:flex;gap:8px;align-items:center;}
+.ctrl-sk-body{padding:12px 14px;}
+
+/* Painel de decisão do controlador */
+.decision-panel{background:var(--bg2);border:1px solid var(--b1);border-radius:4px;padding:14px;}
+
+/* Controles head no controlador */
+.head-controls-wrap{background:var(--bg3);border:1px solid var(--b2);border-left:2px solid var(--acc2);border-radius:3px;padding:12px 14px;margin-bottom:14px;}
+.head-ctrl-ttl{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--acc);margin-bottom:10px;}
+.cbtn{width:100%;padding:8px 10px;border-radius:2px;border:1px solid;font-family:var(--mono);font-size:10px;cursor:pointer;transition:all .15s;margin-bottom:5px;text-align:left;display:flex;align-items:center;gap:7px;}
+.cbtn-approve{background:rgba(46,204,113,.08);border-color:var(--grn2);color:var(--grn);}
+.cbtn-approve:hover{background:rgba(46,204,113,.18);}
+.cbtn-block{background:rgba(231,76,60,.08);border-color:var(--red2);color:var(--red);}
+.cbtn-block:hover{background:rgba(231,76,60,.18);}
+.cbtn-review{background:rgba(59,130,246,.08);border-color:var(--blu2);color:var(--blu);}
+.cbtn-review:hover{background:rgba(59,130,246,.18);}
+.cbtn-start{background:rgba(232,160,32,.08);border-color:var(--acc2);color:var(--acc);}
+.cbtn-start:hover{background:rgba(232,160,32,.18);}
+.cbtn-reset{background:transparent;border-color:var(--b2);color:var(--t3);}
+.cbtn-reset:hover{border-color:var(--t2);color:var(--t2);}
+.cbtn:disabled{opacity:.3;cursor:not-allowed;}
+.dod-gate-msg{background:rgba(231,76,60,.07);border:1px solid var(--red2);border-radius:2px;padding:5px 8px;font-family:var(--mono);font-size:9px;color:var(--red);margin-bottom:4px;line-height:1.5;}
+
+/* Confidence block */
+.confidence-block{background:var(--bg4);border:1px solid var(--b2);border-radius:3px;padding:12px;margin-bottom:12px;}
+.conf-ttl{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin-bottom:8px;}
+.conf-score-row{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+.conf-pct{font-family:var(--mono);font-size:24px;font-weight:700;}
+.conf-bar-wrap{flex:1;height:6px;background:var(--bg5);border-radius:3px;overflow:hidden;}
+.conf-bar{height:100%;border-radius:3px;transition:width .5s,background .3s;}
+.conf-details{font-size:10px;color:var(--t2);line-height:1.7;}
+.conf-details span{font-family:var(--mono);color:var(--t1);}
+.gate-msg{background:rgba(231,76,60,.07);border:1px solid var(--red2);border-radius:2px;padding:6px 10px;font-family:var(--mono);font-size:10px;color:var(--red);margin-top:8px;}
+
+/* Painel de Veredito */
+.dec-board{display:flex;flex-direction:column;}
+.dec-entry{display:flex;gap:0;position:relative;}
+.dec-entry:not(:last-child) .dec-line{background:var(--b2);}
+.dec-timeline-col{display:flex;flex-direction:column;align-items:center;width:32px;flex-shrink:0;padding-top:2px;}
+.dec-dot-outer{width:22px;height:22px;border-radius:50%;border:1px solid;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dec-line{width:1px;flex:1;min-height:12px;background:transparent;}
+.dec-dot-estrategico{border-color:var(--pur2);background:rgba(155,89,182,.15);}
+.dec-dot-estrategico .dec-dot-inner{background:var(--pur);}
+.dec-dot-tecnico{border-color:var(--blu2);background:rgba(59,130,246,.12);}
+.dec-dot-tecnico .dec-dot-inner{background:var(--blu);}
+.dec-dot-bloqueio{border-color:var(--red2);background:rgba(231,76,60,.12);}
+.dec-dot-bloqueio .dec-dot-inner{background:var(--red);}
+.dec-dot-aprovacao{border-color:var(--grn2);background:rgba(46,204,113,.12);}
+.dec-dot-aprovacao .dec-dot-inner{background:var(--grn);}
+.dec-dot-inner{width:7px;height:7px;border-radius:50%;}
+.dec-card{flex:1;background:var(--bg3);border:1px solid var(--b2);border-radius:3px;padding:10px 12px;margin:0 0 8px 8px;}
+.dec-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:5px;gap:6px;}
+.dec-skill-tag{font-family:var(--mono);font-size:8px;color:var(--acc);}
+.dec-meta{display:flex;gap:5px;align-items:center;flex-wrap:wrap;}
+.dec-type-chip{font-family:var(--mono);font-size:8px;padding:2px 6px;border-radius:2px;border:1px solid;}
+.dtc-estrategico{color:var(--pur);border-color:var(--pur2);background:rgba(155,89,182,.12);}
+.dtc-tecnico{color:var(--blu);border-color:var(--blu2);background:rgba(59,130,246,.1);}
+.dtc-bloqueio{color:var(--red);border-color:var(--red2);background:rgba(231,76,60,.1);}
+.dtc-aprovacao{color:var(--grn);border-color:var(--grn2);background:rgba(46,204,113,.1);}
+.dec-urg{font-family:var(--mono);font-size:7px;padding:2px 5px;border-radius:2px;}
+.urg-alta{color:var(--acc);background:rgba(232,160,32,.1);}
+.urg-critica{color:var(--red);background:rgba(231,76,60,.1);}
+.dec-body{font-size:11px;color:var(--t1);line-height:1.5;margin-bottom:5px;}
+.dec-footer{display:flex;align-items:center;justify-content:space-between;}
+.dec-author{font-family:var(--mono);font-size:9px;color:var(--t3);}
+.dec-date{font-family:var(--mono);font-size:9px;color:var(--t3);}
+.dec-filters{display:flex;gap:3px;margin-bottom:7px;flex-wrap:wrap;}
+.dec-filter{font-family:var(--mono);font-size:9px;padding:3px 8px;border:1px solid var(--b2);background:transparent;color:var(--t3);border-radius:2px;cursor:pointer;transition:all .15s;}
+.dec-filter.on{border-color:var(--acc2);color:var(--acc);background:rgba(232,160,32,.08);}
+.dec-search-inp{width:100%;background:var(--bg4);border:1px solid var(--b2);border-radius:2px;color:var(--t2);font-family:var(--mono);font-size:9px;padding:4px 8px;outline:none;margin-bottom:6px;}
+.dec-search-inp:focus{border-color:var(--cyn2);}
+.dec-list-wrap{max-height:300px;overflow-y:auto;margin-bottom:8px;}
+.empty-dec{font-family:var(--mono);font-size:10px;color:var(--t3);padding:8px 4px;}
+.add-dec-ta{width:100%;background:var(--bg3);border:1px solid var(--b2);border-radius:2px;color:var(--t1);font-family:var(--mono);font-size:10px;padding:7px 9px;resize:none;height:52px;outline:none;line-height:1.5;}
+.add-dec-ta:focus{border-color:var(--acc);}
+.add-dec-row{display:flex;gap:5px;margin-top:5px;}
+.add-dec-sel{flex:1;background:var(--bg3);border:1px solid var(--b2);border-radius:2px;color:var(--t2);font-family:var(--mono);font-size:10px;padding:5px;outline:none;}
+.add-dec-btn{font-family:var(--mono);font-size:9px;padding:5px 12px;border:1px solid var(--acc2);background:rgba(232,160,32,.08);color:var(--acc);border-radius:2px;cursor:pointer;}
+
+/* Export btn */
+.export-btn{font-family:var(--mono);font-size:10px;padding:7px 14px;border:1px solid var(--tel2);background:rgba(26,188,156,.08);color:var(--tel);border-radius:2px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px;}
+.export-btn:hover{background:rgba(26,188,156,.16);}
+
+/* Agenda daily */
+.daily-slot{display:flex;gap:9px;margin-bottom:8px;}
+.daily-time{font-family:var(--mono);font-size:10px;color:var(--acc);width:32px;flex-shrink:0;padding-top:1px;}
+.daily-act{font-size:11px;color:var(--t1);font-weight:500;margin-bottom:2px;}
+.daily-sub{font-size:10px;color:var(--t2);line-height:1.4;}
+
+/* Misc */
+.ftag{display:inline-flex;font-family:var(--mono);font-size:9px;padding:1px 6px;border:1px solid var(--cyn2);background:rgba(0,212,255,.05);color:var(--cyn);border-radius:2px;margin-right:3px;}
+.wip-warn{background:rgba(231,76,60,.07);border:1px solid var(--red2);border-radius:2px;padding:7px 10px;font-family:var(--mono);font-size:10px;color:var(--red);margin-bottom:8px;}
+.dep-warn{background:rgba(155,89,182,.07);border:1px solid var(--pur2);border-radius:2px;padding:7px 10px;font-family:var(--mono);font-size:10px;color:var(--pur);margin-bottom:8px;}
+
+/* RIGHT PANEL (controlador usa inline, colaborador usa painel) */
+.right-panel{background:var(--bg2);border-left:1px solid var(--b1);overflow-y:auto;position:sticky;top:50px;max-height:calc(100vh - 50px);}
+.rp-sec{border-bottom:1px solid var(--b1);padding:12px 14px;}
+.rp-title{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:var(--t3);margin-bottom:10px;}
+
+/* Modals */
+.sb-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:600;align-items:center;justify-content:center;}
+.sb-modal-bg.open{display:flex;}
+.sb-modal{background:var(--bg2);border:1px solid var(--b2);border-radius:4px;padding:22px;width:440px;max-width:92vw;}
+.sb-modal h3{font-family:var(--mono);font-size:12px;color:var(--cyn);margin-bottom:4px;}
+.sb-modal p{font-size:11px;color:var(--t2);line-height:1.6;margin-bottom:16px;}
+.sb-field{margin-bottom:12px;}
+.sb-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;}
+.sb-input{width:100%;background:var(--bg4);border:1px solid var(--b2);border-radius:2px;color:var(--t1);font-family:var(--mono);font-size:11px;padding:7px 10px;outline:none;}
+.sb-input:focus{border-color:var(--cyn2);}
+.sb-modal-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:4px;}
+.sb-modal p.note{font-size:10px;color:var(--t3);font-family:var(--mono);border-top:1px solid var(--b1);padding-top:10px;margin-top:4px;margin-bottom:0;}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:500;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--b2);border-radius:4px;padding:20px;width:380px;max-width:90vw;}
+.modal h3{font-family:var(--mono);font-size:13px;color:var(--acc);margin-bottom:12px;}
+.modal p{font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:16px;}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end;}
+.mbtn{font-family:var(--mono);font-size:11px;padding:7px 16px;border-radius:2px;border:1px solid;cursor:pointer;transition:all .15s;}
+.mbtn-cancel{background:transparent;border-color:var(--b2);color:var(--t3);}
+.mbtn-confirm{background:rgba(46,204,113,.1);border-color:var(--grn2);color:var(--grn);}
+.mbtn-danger{background:rgba(231,76,60,.1);border-color:var(--red2);color:var(--red);}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--bg3);border:1px solid var(--b2);border-radius:4px;padding:10px 16px;font-family:var(--mono);font-size:11px;color:var(--t1);z-index:9999;transform:translateY(60px);opacity:0;transition:all .25s;max-width:340px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.ok{border-color:var(--grn2);color:var(--grn);}
+.toast.warn{border-color:var(--acc2);color:var(--acc);}
+.toast.err{border-color:var(--red2);color:var(--red);}
+
+/* ── AVALIAÇÃO ESTRUTURADA ── */
+.eval-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0;}
+@media(max-width:700px){.eval-grid{grid-template-columns:1fr;}}
+.eval-item{background:var(--bg3);border:1px solid var(--b1);border-radius:3px;padding:10px 12px;}
+.eval-item-lbl{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:8px;}
+.eval-opts{display:flex;flex-direction:column;gap:4px;}
+.eval-opt{font-family:var(--mono);font-size:10px;padding:6px 10px;border:1px solid var(--b2);background:transparent;color:var(--t3);border-radius:2px;cursor:pointer;text-align:left;transition:all .15s;width:100%;}
+.eval-opt:hover{color:var(--t2);border-color:var(--b3);}
+.ev-grn{border-color:var(--grn2)!important;color:var(--grn)!important;background:rgba(46,204,113,.1)!important;}
+.ev-acc{border-color:var(--acc2)!important;color:var(--acc)!important;background:rgba(201,151,26,.1)!important;}
+.ev-red{border-color:var(--red2)!important;color:var(--red)!important;background:rgba(231,76,60,.1)!important;}
+/* ── ACTION BUTTONS ── */
+.output-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--b1);}
+.btn-export{font-family:var(--mono);font-size:9px;padding:5px 12px;border:1px solid var(--tel2);background:rgba(26,188,156,.07);color:var(--tel);border-radius:2px;cursor:pointer;transition:all .15s;}
+.btn-export:hover{background:rgba(26,188,156,.15);}
+.btn-delete{font-family:var(--mono);font-size:9px;padding:5px 12px;border:1px solid var(--red2);background:rgba(231,76,60,.07);color:var(--red);border-radius:2px;cursor:pointer;transition:all .15s;margin-left:auto;}
+.btn-delete:hover{background:rgba(231,76,60,.15);}
+.btn-prompt{font-family:var(--mono);font-size:9px;padding:5px 12px;border:1px solid var(--cyn2);background:rgba(74,184,216,.07);color:var(--cyn);border-radius:2px;cursor:pointer;transition:all .15s;}
+.btn-prompt:hover{background:rgba(74,184,216,.15);}
+/* ── CHECKLIST SECTION TITLE ── */
+.chk-sec-ttl{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--acc);margin:14px 0 8px;display:flex;align-items:center;gap:8px;}
+.chk-sec-ttl::after{content:'';flex:1;height:1px;background:var(--b1);}
+/* ── PROMPT BLOCK ── */
+.prompt-block{background:var(--bg4);border:1px solid var(--cyn2);border-left:2px solid var(--cyn);border-radius:3px;padding:12px;margin-top:10px;display:none;}
+.prompt-block.open{display:block;}
+.prompt-block-lbl{font-family:var(--mono);font-size:9px;color:var(--cyn);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;}
+.prompt-pre{font-family:var(--mono);font-size:9px;color:var(--t2);white-space:pre-wrap;word-break:break-word;line-height:1.7;max-height:200px;overflow-y:auto;}
+/* ── EVAL CHIPS (controller matrix) ── */
+.eval-chip{font-family:var(--mono);font-size:8px;padding:2px 5px;border-radius:2px;border:1px solid;display:inline-block;margin:1px;}
+.ec-grn{color:var(--grn);border-color:var(--grn2);background:rgba(46,204,113,.1);}
+.ec-acc{color:var(--acc);border-color:var(--acc2);background:rgba(201,151,26,.1);}
+.ec-red{color:var(--red);border-color:var(--red2);background:rgba(231,76,60,.1);}
+
+/* Aperfeiçoamento */
+.hall-entry{background:var(--bg4);border:1px solid var(--red2);border-radius:3px;padding:9px 12px;margin-bottom:6px;}
+.hall-hdr{display:flex;justify-content:space-between;margin-bottom:3px;}
+.hall-type{font-family:var(--mono);font-size:9px;color:var(--red);text-transform:uppercase;letter-spacing:.08em;}
+.hall-date{font-family:var(--mono);font-size:9px;color:var(--t3);}
+.hall-text{font-size:11px;color:var(--t2);line-height:1.5;}
+.hall-fix{font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:3px;border-top:1px solid var(--red3);padding-top:3px;}
+.hall-add{display:flex;flex-direction:column;gap:5px;}
+.hall-sel{background:var(--bg4);border:1px solid var(--b2);border-radius:2px;color:var(--t2);font-family:var(--mono);font-size:10px;padding:5px 8px;outline:none;width:100%;}
+.hall-ta{width:100%;background:var(--bg4);border:1px solid var(--b2);border-radius:2px;color:var(--t1);font-family:var(--mono);font-size:10px;padding:7px 9px;resize:none;min-height:55px;outline:none;line-height:1.5;}
+.hall-ta:focus{border-color:var(--red2);}
+.hall-submit{font-family:var(--mono);font-size:9px;padding:5px 12px;border:1px solid var(--red2);background:rgba(231,76,60,.08);color:var(--red);border-radius:2px;cursor:pointer;align-self:flex-end;}
+.refine-btn{width:100%;padding:9px;font-family:var(--mono);font-size:10px;border:1px solid var(--cyn2);background:rgba(0,212,255,.07);color:var(--cyn);border-radius:3px;cursor:pointer;transition:all .15s;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.refine-btn:hover{background:rgba(0,212,255,.14);}
+.refine-loading{font-family:var(--mono);font-size:10px;color:var(--cyn);padding:10px 0;text-align:center;display:none;animation:blink 1.2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:.4;}50%{opacity:1;}}
+.refine-output-pre{background:var(--bg3);border:1px solid var(--grn2);border-radius:3px;padding:12px;font-family:var(--mono);font-size:9px;color:var(--tel);white-space:pre-wrap;word-break:break-word;line-height:1.7;max-height:360px;overflow-y:auto;margin-top:8px;}
+.refine-copy-btn{font-family:var(--mono);font-size:8px;padding:2px 8px;border:1px solid var(--grn2);background:rgba(46,204,113,.1);color:var(--grn);border-radius:2px;cursor:pointer;}
+
+/* Grid controlador */
+.ctrl-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.ctrl-grid-full{grid-column:1/-1;}
+@media(max-width:900px){.ctrl-grid{grid-template-columns:1fr;}}
+
+/* ── BANNER DE AVISO ── */
+.uso-banner{
+  background:linear-gradient(90deg,rgba(201,151,26,.13) 0%,rgba(18,32,56,.6) 100%);
+  border:1px solid var(--acc2);border-left:3px solid var(--acc);
+  border-radius:3px;padding:9px 14px;margin-bottom:12px;
+  font-family:var(--mono);font-size:10px;color:var(--acc3);
+  line-height:1.5;letter-spacing:.02em;
+}
+
+/* ── PAINEL DE VEREDITO ── */
+.veredito-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg3);border:1px solid var(--b1);border-radius:3px;margin-bottom:6px;flex-wrap:wrap;}
+.veredito-skill-info{display:flex;align-items:center;gap:8px;flex:1;min-width:180px;}
+.veredito-cmd{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--t1);}
+.veredito-btns{display:flex;gap:6px;flex-wrap:wrap;}
+.vbtn{font-family:var(--mono);font-size:9px;padding:5px 11px;border-radius:2px;border:1px solid;cursor:pointer;transition:all .15s;background:transparent;}
+.vbtn-aprovada{border-color:var(--grn2);color:var(--grn);}
+.vbtn-aprovada:hover,.vbtn-aprovada.vbtn-on{background:rgba(46,204,113,.18);border-color:var(--grn);}
+.vbtn-ajuste{border-color:var(--acc2);color:var(--acc);}
+.vbtn-ajuste:hover,.vbtn-ajuste.vbtn-on{background:rgba(201,151,26,.18);border-color:var(--acc);}
+.vbtn-bloqueada{border-color:var(--red2);color:var(--red);}
+.vbtn-bloqueada:hover,.vbtn-bloqueada.vbtn-on{background:rgba(231,76,60,.18);border-color:var(--red);}
+.veredito-badge{font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:2px;border:1px solid;}
+.vbadge-aprovada{color:var(--grn);border-color:var(--grn2);background:rgba(46,204,113,.1);}
+.vbadge-ajuste{color:var(--acc);border-color:var(--acc2);background:rgba(201,151,26,.1);}
+.vbadge-bloqueada{color:var(--red);border-color:var(--red2);background:rgba(231,76,60,.1);}
+
+/* ── LOGO STARK ── */
+.logo{font-size:13px;gap:4px;}
+/* ── OUTPUT CARD CONTROLADOR ── */
+.ctrl-output-card{background:var(--bg3);border:1px solid var(--b2);border-radius:4px;overflow:hidden;}
+.ctrl-output-card-hdr{padding:10px 14px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;background:var(--bg4);}
+.ctrl-output-section{padding:12px 14px;}
+.ctrl-output-lbl{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin-bottom:7px;}
+.ctrl-output-body{background:var(--bg2);border:1px solid var(--b1);border-radius:3px;padding:12px 14px;font-family:var(--mono);font-size:10px;color:var(--t2);line-height:1.7;white-space:pre-wrap;word-break:break-word;max-height:340px;overflow-y:auto;}
+
+/* ── VITRINE DE VEREDITO ── */
+.vitrine-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+@media(max-width:1000px){.vitrine-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:700px){.vitrine-grid{grid-template-columns:1fr;}}
+.vitrine-card{background:var(--bg3);border:1px solid var(--b2);border-radius:4px;padding:14px;display:flex;flex-direction:column;gap:8px;transition:border-color .2s;}
+.vitrine-card:hover{border-color:var(--b3);}
+.vitrine-card-aprovada{border-color:var(--grn2);background:rgba(46,204,113,.04);}
+.vitrine-card-ajuste{border-color:var(--acc2);background:rgba(201,151,26,.04);}
+.vitrine-card-bloqueada{border-color:var(--red2);background:rgba(231,76,60,.04);}
+.vitrine-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.vitrine-cmd{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--t1);}
+.vitrine-meta{display:flex;flex-direction:column;gap:3px;}
+.vitrine-veredito{font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:2px;border:1px solid;text-align:center;}
+.vitrine-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:2px;}
+.vitrine-btns .vbtn{font-size:8px;padding:5px 4px;text-align:center;justify-content:center;}
+
+/* ── OUTPUT REGISTRO EXPANDIDO ── */
+.output-registro-wrap{display:flex;flex-direction:column;gap:12px;}
+.output-reg-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:10px 14px;background:var(--bg2);border:1px solid var(--b1);border-radius:4px;}
+.output-main-block{display:flex;flex-direction:column;gap:6px;}
+.output-main-lbl{display:flex;align-items:baseline;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:10px;font-weight:600;color:var(--acc);text-transform:uppercase;letter-spacing:.08em;}
+.output-ta-main{min-height:280px;font-size:11px;line-height:1.7;border-color:var(--b3);background:var(--bg3);}
+.output-ta-main:focus{border-color:var(--acc);box-shadow:0 0 0 1px rgba(201,151,26,.2);}
+.output-secondary-block{display:flex;flex-direction:column;gap:5px;}
+.output-secondary-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;}
+.output-ta-secondary{min-height:80px;font-size:10px;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<div class="hdr">
+  <div class="logo"><span style="font-family:var(--sans);font-weight:600;letter-spacing:.05em;">STARK</span><span style="color:var(--t3);font-family:var(--mono);font-weight:400;"> / </span><span style="font-family:var(--mono);font-weight:700;letter-spacing:.08em;">SKILL·OPS</span><span class="logo-v">v3.3</span></div>
+  <div class="hdr-sep"></div>
+  <!-- Mode toggle -->
+  <div class="mode-toggle">
+    <button class="mode-btn on colaborador" id="mode-colab" onclick="setMode('colaborador')">◈ Colaborador</button>
+    <button class="mode-btn controlador" id="mode-ctrl" onclick="setMode('controlador')">⬡ Controlador</button>
+  </div>
+  <div class="hdr-sep"></div>
+  <div class="sb-pill disconnected" id="sb-pill" onclick="openSBModal()">
+    <div class="sb-dot"></div><span id="sb-pill-txt">Supabase: desconectado</span>
+  </div>
+  <div class="sb-pill" id="cu-pill" onclick="openCUModal()" style="border-color:var(--cyn2);color:var(--cyn);background:rgba(74,184,216,.07);">
+    <div class="sb-dot" style="background:var(--cyn);"></div><span id="cu-pill-txt">ClickUp: não configurado</span>
+  </div>
+  <div class="hdr-r">
+    <div class="clock" id="clock">--:--:--</div>
+    <div class="hdr-sep"></div>
+    <div class="ubadge gustavo" id="btn-g" onclick="setUser('gustavo')">◈ GUSTAVO</div>
+    <div class="ubadge amanda" id="btn-a" onclick="setUser('amanda')">◈ AMANDA</div>
+  </div>
+</div>
+
+<!-- ══════════ MAIN ══════════ -->
+<div class="main" id="main-grid">
+
+  <!-- SIDEBAR (sempre visível) -->
+  <div class="sidebar">
+    <div class="sb-sec">
+      <div class="sb-ttl">Skills · Ciclo de Validação</div>
+      <div id="skill-nav"></div>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-ttl">Regras de Fluxo</div>
+      <div class="rule-block"><div class="rule-icon">1.</div><div>Testar apenas uma skill por vez.</div></div>
+      <div class="rule-block"><div class="rule-icon">2.</div><div>Seguir rigorosamente os ciclos de validação.</div></div>
+      <div class="rule-block"><div class="rule-icon">3.</div><div>Manter todos os registros de output atualizados nesta ferramenta.</div></div>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-ttl">Legenda</div>
+      <div class="leg-row"><div class="sdot sd-pending"></div>Pendente</div>
+      <div class="leg-row"><div class="sdot sd-active"></div>Em teste</div>
+      <div class="leg-row"><div class="sdot sd-review"></div>Aguardando revisão</div>
+      <div class="leg-row"><div class="sdot sd-approved"></div>Aprovada</div>
+      <div class="leg-row"><div class="sdot sd-blocked"></div>Bloqueada</div>
+      <div class="leg-row"><div class="sdot sd-paused"></div>Pausada</div>
+    </div>
+    <!-- Agenda daily (simplificada) -->
+    <div class="sb-sec">
+      <div class="sb-ttl">Daily · 15 min</div>
+      <div class="daily-slot"><div class="daily-time">0:00</div><div><div class="daily-act">Abertura</div><div class="daily-sub">Check-up geral. Todos com registro feito?</div></div></div>
+      <div class="daily-slot"><div class="daily-time">5:00</div><div><div class="daily-act">Discussão</div><div class="daily-sub">Debate de outputs. Cada gestor apresenta em 1 min.</div></div></div>
+      <div class="daily-slot"><div class="daily-time">12:00</div><div><div class="daily-act">Encerramento</div><div class="daily-sub">Veredito e definição do novo ciclo.</div></div></div>
+    </div>
+  </div>
+
+  <!-- CONTENT (alternado por modo) -->
+  <div style="display:flex;flex-direction:column;overflow:hidden;">
+    <!-- Stats bar -->
+    <div class="stats-bar" id="stats-bar">
+      <div class="stat"><div class="stat-lbl">Ciclo ativo</div><div class="stat-val sv-acc" id="s-ciclo">—</div></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><div class="stat-lbl">Aprovadas</div><div class="stat-val sv-grn" id="s-aprov">0</div></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><div class="stat-lbl">Em teste</div><div class="stat-val sv-acc" id="s-ativas">0</div></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><div class="stat-lbl">Pendentes</div><div class="stat-val sv-t" id="s-pend">8</div></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><div class="stat-lbl">Bloqueadas</div><div class="stat-val sv-red" id="s-bloq">0</div></div>
+      <div class="stat-sep"></div>
+      <div class="sprint-wrap"><div class="stat-lbl">Sprint progress</div><div class="sprint-bar" id="sprint-bar"></div></div>
+    </div>
+    <!-- Área de conteúdo -->
+    <div class="content" id="content">
+      <div class="empty-state"><div class="empty-icon">◈</div><div class="empty-txt">Selecione uma skill no painel esquerdo</div></div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL (só no modo colaborador) -->
+  <div class="right-panel" id="right-panel">
+    <div class="rp-sec">
+      <div class="rp-title">Painel de Veredito <span id="dec-count" style="color:var(--t3);font-size:9px;"></span></div>
+      <div class="dec-filters">
+        <button class="dec-filter on" onclick="filterDec('all',this)">Todos</button>
+        <button class="dec-filter" onclick="filterDec('estrategico',this)">Estratégico</button>
+        <button class="dec-filter" onclick="filterDec('tecnico',this)">Técnico</button>
+        <button class="dec-filter" onclick="filterDec('bloqueio',this)">Bloqueio</button>
+        <button class="dec-filter" onclick="filterDec('aprovacao',this)">Aprovação</button>
+      </div>
+      <input class="dec-search-inp" id="dec-search" placeholder="🔍 Buscar..." oninput="renderDecs()">
+      <div class="dec-list-wrap" id="dec-log"><div class="empty-dec">Nenhuma decisão ainda.</div></div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- SUPABASE MODAL -->
+<div class="sb-modal-bg" id="sb-modal">
+  <div class="sb-modal">
+    <h3>◈ Configurar Supabase</h3>
+    <p>Conecte ao banco para sincronizar em tempo real com toda a equipe.</p>
+    <div class="sb-field"><div class="sb-lbl">Supabase URL</div><input class="sb-input" id="sb-url-inp" placeholder="https://xxxx.supabase.co"></div>
+    <div class="sb-field"><div class="sb-lbl">Anon Key</div><input class="sb-input" id="sb-key-inp" placeholder="eyJhbGciOiJIUzI1NiIs..." type="password"></div>
+    <div class="sb-modal-btns">
+      <button class="mbtn mbtn-cancel" onclick="closeSBModal()">Cancelar</button>
+      <button class="mbtn mbtn-confirm" onclick="connectSupabase()">Conectar e Testar</button>
+    </div>
+    <p class="note">Tabelas necessárias: skill_states, gestor_phases, hallucinations, decisions, gestor_outputs.</p>
+  </div>
+</div>
+
+<!-- CLICKUP CONFIG MODAL -->
+<div class="sb-modal-bg" id="cu-modal">
+  <div class="sb-modal">
+    <h3 style="color:var(--cyn);">◈ Configurar ClickUp</h3>
+    <p>Cole sua API Key pessoal do ClickUp. Ela fica salva neste browser. O sistema cria e gerencia as tasks automaticamente — sem nenhuma ação manual no ClickUp.</p>
+    <div class="sb-field">
+      <div class="sb-lbl">API Key pessoal</div>
+      <input class="sb-input" id="cu-key-inp" placeholder="pk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" type="password">
+    </div>
+    <div class="sb-modal-btns">
+      <button class="mbtn mbtn-cancel" onclick="closeCUModal()">Cancelar</button>
+      <button class="mbtn" style="background:rgba(74,184,216,.1);border-color:var(--cyn2);color:var(--cyn);" onclick="conectarClickUp()">Conectar e Testar</button>
+    </div>
+    <p class="note">ClickUp → Configurações → Apps → API Token. A list será criada automaticamente em Tráfego Pago.</p>
+  </div>
+</div>
+
+<!-- GENERIC MODAL -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <h3 id="modal-title">Confirmar ação</h3>
+    <p id="modal-text"></p>
+    <div class="modal-btns">
+      <button class="mbtn mbtn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="mbtn mbtn-confirm" id="modal-ok">Confirmar</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+
+/* ════════════════════════════════════
+   SKILL KNOWLEDGE BASE
+════════════════════════════════════ */
+const SKILL_KNOWLEDGE = {
+  'analisar':`# /analisar-campanhas\n\n## Propósito\nDiagnóstico consolidado de todas as etapas do funil nos últimos 7 dias via MCP Meta Ads. Registra resultado no ClickUp (lista "Otimização Campanhas Meta Ads", ID: 901311804425).\n\n## Fluxo\n1. Identificar cliente\n2. Coletar dados via MCP Meta Ads: TOFU (custo por seguidor), MOFU (CTR, cobertura de criativos, frequência), BOFU (CPL, volume de leads)\n3. Diagnosticar TOFU: ✅ CPS ≤ R$1,50 | ⚠ R$1,50–R$3,00 | 🔴 >R$3,00\n4. Diagnosticar MOFU: ✅ CTR ≥ 1,5% | ⚠ 1,0–1,5% | 🔴 <1,0%. Checar cobertura (Antes/Depois + Depoimentos + Quebra de Objeção) e frequência (benchmark ≤ 3)\n5. Diagnosticar BOFU: ✅ CPL R$7–R$12 | ⚠ R$12–R$20 | 🔴 >R$20 ou zero leads\n6. Verificar criativos rejeitados e campanhas com resultado zero\n7. Criar task no ClickUp com diagnóstico completo\n\n## Output\nRelatório markdown com status por funil + tarefa criada no ClickUp`,
+  'status-report':`# /preencher-status-report\n\n## Propósito\nDocumentar AÇÕES do gestor, não métricas. Cria task na lista "Status Report" (ID: 901300668557) do ClickUp.\n\n## Fluxo\n1. Definir período e cliente\n2. Coletar histórico de mudanças via MCP Meta Ads: anúncios pausados/criados, conjuntos criados, ajustes de orçamento\n3. Coletar alterações via MCP Google Ads (se disponível)\n4. Cruzar com tarefas concluídas no ClickUp: "Criativos a Subir no ADS" (ID: 901304117561) e "Otimização Campanhas Meta Ads" (ID: 901311804425)\n5. Montar draft do report: tabela de criativos subidos, otimizações executadas, ajustes de orçamento + observações do gestor\n6. Apresentar draft ao gestor para revisão → criar task no ClickUp após aprovação\n\n## Diferença chave\nNão documenta métricas de performance. Para diagnóstico, use /analisar-campanhas.`,
+  'relatorio':`# /relatorio-trafego\n\n## Propósito\nRelatório completo via MCP Reportei com diagnóstico causal, narrativa para Linha do Tempo, template Tráfego 3.0 e mensagem de WhatsApp. Suporta modo lote (múltiplos clientes).\n\n## Fluxo\n1. Identificar cliente(s) e detectar granularidade: semanal/quinzenal/mensal/trimestral (por palavras-chave ou dia do mês)\n2. Buscar projeto no Reportei via list_projects + identificar integrações fb_ads/google_ads\n3. Coletar métricas via get_metrics (período atual + comparativo)\n4. Pesquisar contexto de mercado: feriados, sazonalidade da especialidade, benchmark de CPL atualizado\n5. Diagnosticar causas das variações (CTR caiu+CPC subiu → leilão acirrado; frequência >2,5 → saturação etc.)\n6. Gerar narrativa HTML para Linha do Tempo\n7. Criar relatório com template Tráfego 3.0 via create_report\n8. Publicar na timeline via create_timeline_event\n9. Registrar no ClickUp (lista ID: 901326445682) e entregar mensagem de WhatsApp\n\n## Benchmarks de CPL Meta (referência)\nCirurgia Plástica: R$6–15 | Ortognática: R$20–50 | Dermatologia: R$10–25 | Implantes: R$25–55 | Emagrecimento: R$25–80`,
+  'otimizar':`# /otimizar-campanhas\n\n## Propósito\nOtimização via 3 sub-agentes especializados por funil. Pré-requisito: /analisar-campanhas aprovada.\n\n## Sub-agentes\n- **TOFU:** avalia custo por seguidor, pausa anúncios com CPS > R$3,00, escala ≤ R$1,50\n- **MOFU:** verifica CTR, cobertura de tipos de criativo (Antes/Depois, Depoimentos, Quebra de Objeção) e frequência\n- **BOFU:** avalia CPL vs. benchmark, volume de leads, campanhas com zero resultado\n\n## Autonomia\n- Executa automaticamente: pausas por CPS/CPL crítico, ajustes de bid\n- Aguarda aprovação: redistribuição de budget entre funis, criação de novos conjuntos, alterações de público\n\n## Regra de uso\nNunca rodar sem o output do /analisar-campanhas como contexto. Esta skill afeta diretamente os investimentos dos clientes.`,
+  'agenda-conteudo':`# /testar-agenda-conteudo\n\n## Propósito\nSubir 100% dos criativos elegíveis da Agenda de Postagem 3.0 nas campanhas ABO. Nunca sobe virais, memes ou conteúdo de influenciadores.\n\n## Fluxo\n1. Identificar cliente\n2. Buscar tarefas no ClickUp (lista Agenda 3.0, ID: 901324888130): coletar Etapa do Funil, CTA, Formato, Data de postagem, Headline, Procedimento\n3. Filtrar elegibilidade:\n   - ✅ Incluir: educacional, antes/depois, depoimentos, quebra de objeção, CTAs de valor\n   - ❌ Excluir: viral, meme, influencer, engajamento vazio\n4. Apresentar lista ao gestor (elegíveis + excluídos) e aguardar confirmação\n5. Localizar criativo no feed do Instagram (por data/headline)\n6. Subir em campanha ABO do funil correspondente: nome [Data]-[Headline]-Teste, R$6/dia, 1 criativo/conjunto\n7. Atualizar status e observações no ClickUp\n\n## Playbook de teste\nSempre ABO → nunca escalar para CBO sem 7 dias de validação`,
+  'darkposts':`# /testar-darkposts\n\n## Propósito\nSubir darkposts aprovados (vídeo MP4 ou imagem JPG/PNG) nas campanhas ABO. Acionado pontualmente quando há darkpost novo, não segue cadência semanal.\n\n## Fluxo\n1. Identificar cliente\n2. Buscar tasks pendentes no ClickUp — lista "Criativos a Subir no ADS" (ID: 901304117561) com Área de Destino = Tráfego Pago\n3. Coletar: nome, link Drive, etapa do funil, tipo (vídeo/imagem). Confirmar lista com gestor\n4. Acessar arquivos no Google Drive e verificar formato\n5. Criar conjunto ABO: nome [Data]-[Nome]-Darkpost, R$6/dia, 1 criativo. Darkposts com CTA de agendamento → BOFU por padrão\n6. Atualizar status no ClickUp (pendente → em teste) com data de upload, campanha e ID do conjunto\n\n## Verificação pós-upload obrigatória\nDarkpost no conjunto correto? URL de destino? Pixel disparando? Criativo em veiculação?`,
+  'preencher-planilha':`# /preencher-planilha\n\n## Propósito\nColetar métricas da semana anterior (segunda a domingo) no Reportei via Claude in Chrome e preencher a planilha master do Google Sheets.\n\n## Planilha master\nhttps://docs.google.com/spreadsheets/d/1crqoxq8hqaQWsoZby5FlQt50gpUZ29buyeRKkv3M5Og/edit\nAba: sempre a mais recente (última à direita, formato DD/MM/AAAA)\n\n## Fluxo\n1. Confirmar cliente com o gestor\n2. Acessar app.reportei.com via Claude in Chrome → overview "MODELO" → período da semana anterior\n3. Coletar: Gasto Meta (col. C), Conversas (E), Seguidores IG (F), Gasto Google (H), Leads Google (K), Leads Google Ads (O)\n4. Abrir planilha → aba mais recente → localizar linha do cliente na col. A\n5. Preencher apenas colunas C, E, F, H, K, O\n\n## Regra crítica\nJAMAIS tocar nas colunas D, I, J, L, M, N, P — contêm fórmulas. Cálculo da semana: segunda = hoje − (dia_da_semana − 1) − 7`,
+  'relatorio-semanal':`# /relatorio-semanal-stark\n\n## Propósito\nRelatório automático de tráfego pago para clientes da Stark Marketing via MCP Reportei. Roda toda terça-feira às 14h. Empresa ID: 206673.\n\n## Atenção — Slugs específicos Stark\nSlugos reais dos clientes Stark: facebook_ads e google_adwords (NÃO fb_ads/google_ads como nos projetos genéricos)\n\n## Fluxo\n1. Identificar cliente(s): um específico, múltiplos ou lote completo\n2. Detectar granularidade: 7 dias (padrão/terças), 15 dias, mensal. date_end = ontem; date_start = date_end − N dias\n3. list_projects → match parcial pelo sobrenome do cliente\n4. list_integrations → filtrar slugs facebook_ads e google_adwords (usar slug EXATO retornado)\n5. get_metrics: período atual + período de comparação (calcular variações %)\n6. Pesquisar contexto de mercado e benchmark de CPL por especialidade\n7. Diagnóstico causal dos dados (CTR+CPC+conversões → hipótese)\n8. Montar narrativa e criar relatório com template Tráfego 3.0\n9. Publicar na Linha do Tempo via create_timeline_event\n10. Entregar mensagem de WhatsApp formatada por cliente\n\n## Período (exemplo terça 02/04/2026)\nAtual: 26/03 a 01/04 | Comparação: 19/03 a 25/03`
+};
+
+/* ════════════════════════════════════
+   SKILLS DATA
+════════════════════════════════════ */
+const SKILLS = [
+  {id:'analisar',cmd:'/analisar-campanhas',ciclo:1,
+   obj:'Analisar performance dos últimos 7 dias via MCP Meta Ads e gerar diagnóstico TOFU/MOFU/BOFU com status OK/Atenção/Crítico por anúncio. Cria task automática no ClickUp.',
+   fontes:['MCP Meta Ads'],dep:null,clickup_task_id:'',
+   gestores:['Richard','Luiz','Mateus','Andreyves','Wallison','Thiago','Vinicius']},
+  {id:'status-report',cmd:'/preencher-status-report',ciclo:2,
+   obj:'Documentar ações executadas na conta Meta Ads do cliente (criativos subidos, otimizações, pausas, ajustes de orçamento). Foco em ações do gestor, não em métricas. Cria task na lista Status Report no ClickUp.',
+   fontes:['MCP Meta Ads','MCP Google Ads','MCP ClickUp'],dep:null,clickup_task_id:'',
+   gestores:['Richard','Luiz','Mateus','Andreyves','Wallison','Thiago','Vinicius']},
+  {id:'relatorio',cmd:'/relatorio-trafego',ciclo:3,
+   obj:'Gerar relatório completo via MCP Reportei com diagnóstico causal, narrativa para Linha do Tempo, relatório no template Tráfego 3.0 e mensagem de WhatsApp para o cliente. Suporta lote por gestor.',
+   fontes:['MCP Reportei','MCP ClickUp','Busca Web'],dep:null,clickup_task_id:'',
+   gestores:['Richard','Luiz','Mateus','Andreyves','Wallison','Thiago','Vinicius']},
+  {id:'otimizar',cmd:'/otimizar-campanhas',ciclo:4,
+   obj:'Otimizar campanhas Meta Ads em todos os funis via 3 sub-agentes especializados (TOFU/MOFU/BOFU). Executa ações seguras automaticamente e aguarda aprovação do gestor para decisões críticas.',
+   fontes:['MCP Meta Ads','Output /analisar-campanhas'],dep:'analisar',clickup_task_id:'',
+   gestores:['Richard','Luiz','Mateus','Andreyves','Wallison','Thiago','Vinicius']},
+  {id:'agenda-conteudo',cmd:'/testar-agenda-conteudo',ciclo:5,
+   obj:'Buscar criativos elegíveis da Agenda de Postagem 3.0 no ClickUp, filtrar por critérios do playbook (excluindo virais/memes/influenciadores), localizar no feed do Instagram e subir nas campanhas ABO (R$6/dia, 1 criativo/conjunto).',
+   fontes:['MCP ClickUp (Agenda 3.0)','MCP Meta Ads','Instagram'],dep:null,clickup_task_id:'',
+   gestores:['Richard','Luiz','Mateus','Andreyves','Wallison','Thiago','Vinicius']},
+  {id:'darkposts',cmd:'/testar-darkposts',ciclo:6,
+   obj:'Buscar darkposts aprovados na lista "Criativos a Subir no ADS" do ClickUp (ID: 901304117561), localizar arquivos no Google Drive e subir nas campanhas ABO do funil correspondente (R$6/dia, 1 criativo/conjunto).',
+   fontes:['MCP ClickUp','MCP Google Drive','MCP Meta Ads'],dep:null,clickup_task_id:'',
+   gestores:['Richard','Luiz','Mateus','Andreyves','Wallison','Thiago','Vinicius']},
+  {id:'preencher-planilha',cmd:'/preencher-planilha',ciclo:7,
+   obj:'Coletar métricas da semana anterior no Reportei via Claude in Chrome (overview MODELO) e preencher a planilha master do Google Sheets. Colunas-alvo: C (Gasto Meta), E (Conversas), F (Seguidores IG), H (Gasto Google), K (Leads Google), O (Leads Google Ads).',
+   fontes:['Reportei (Claude in Chrome)','Google Sheets'],dep:null,clickup_task_id:'',
+   gestores:['Richard','Luiz','Mateus','Andreyves','Wallison','Thiago','Vinicius']},
+  {id:'relatorio-semanal',cmd:'/relatorio-semanal-stark',ciclo:8,
+   obj:'Gerar e publicar relatórios de tráfego pago para clientes da Stark Marketing via MCP Reportei (Company ID: 206673). Detecta granularidade automaticamente. Slugs reais dos clientes Stark: facebook_ads e google_adwords.',
+   fontes:['MCP Reportei','Busca Web'],dep:'relatorio',clickup_task_id:'',
+   gestores:['Richard','Luiz','Mateus','Andreyves','Wallison','Thiago','Vinicius']}
+];
+
+const ALL_GESTORES = ['Richard','Luiz','Mateus','Andreyves','Wallison','Thiago','Vinicius'];
+const CHECKLIST_LABELS = [
+  {lbl:'Extração',sub:'Dados (CSV Meta/Reportei) extraídos corretamente'},
+  {lbl:'Execução',sub:'Skill rodada no projeto dedicado do Claude'},
+  {lbl:'Auditoria',sub:'Output revisado e feedback técnico preparado'}
+];
+const DOD_ITEMS = [
+  {txt:'Confirmei que os dados de entrada (CSV) estavam no padrão correto?',sub:'Colunas obrigatórias presentes, período correto, exportado como .csv'},
+  {txt:'Revisei manualmente o output gerado e confirmo sua precisão?',sub:'O resultado foi lido com atenção e está adequado para ser apresentado na daily'},
+  {txt:'O registro do teste foi devidamente documentado nesta ferramenta?',sub:'Output e feedback preenchidos na aba "Registro de Output" antes desta aprovação'}
+];
+
+/* ════════════════════════════════════
+   SUPABASE
+════════════════════════════════════ */
+let SB = { url:'', key:'', connected:false };
+function sbHeaders(){ return {'Content-Type':'application/json','apikey':SB.key,'Authorization':'Bearer '+SB.key,'Prefer':'return=representation'}; }
+async function sbUpsert(table,data){ if(!SB.connected){saveLocal();return;} setSBStatus('syncing'); try{ await fetch(`${SB.url}/rest/v1/${table}`,{method:'POST',headers:{...sbHeaders(),'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(data)}); setSBStatus('connected'); }catch(e){ setSBStatus('disconnected'); saveLocal(); }}
+async function sbSelect(table,filter){ if(!SB.connected)return null; try{ const q=filter?`?${filter}`:''; const r=await fetch(`${SB.url}/rest/v1/${table}${q}`,{headers:sbHeaders()}); if(!r.ok)return null; return await r.json(); }catch(e){return null;}}
+function setSBStatus(s){ const p=document.getElementById('sb-pill'),t=document.getElementById('sb-pill-txt'); p.className='sb-pill '+s; t.textContent=s==='connected'?'Supabase: conectado':s==='syncing'?'Supabase: sincronizando...':'Supabase: desconectado'; }
+function openSBModal(){ document.getElementById('sb-url-inp').value=SB.url; document.getElementById('sb-key-inp').value=SB.key; document.getElementById('sb-modal').classList.add('open'); }
+function closeSBModal(){ document.getElementById('sb-modal').classList.remove('open'); }
+async function connectSupabase(){ const url=document.getElementById('sb-url-inp').value.trim().replace(/\/$/,''); const key=document.getElementById('sb-key-inp').value.trim(); if(!url||!key){toast('Preencha URL e Key.','warn');return;} setSBStatus('syncing'); try{ const r=await fetch(`${url}/rest/v1/skill_states?limit=1`,{headers:{'apikey':key,'Authorization':'Bearer '+key}}); if(!r.ok)throw new Error('HTTP '+r.status); SB={url,key,connected:true}; localStorage.setItem('sb_url',url); localStorage.setItem('sb_key',key); setSBStatus('connected'); closeSBModal(); toast('Supabase conectado!','ok'); await loadFromSupabase(); }catch(e){ setSBStatus('disconnected'); toast('Falha: '+e.message,'err'); }}
+async function loadFromSupabase(){
+  const [skillRows,phaseRows,hallRows,decRows,outRows]=await Promise.all([
+    sbSelect('skill_states','order=skill_id'),sbSelect('gestor_phases','order=skill_id,gestor'),
+    sbSelect('hallucinations','order=created_at.desc'),sbSelect('decisions','order=created_at.desc'),
+    sbSelect('gestor_outputs','order=created_at.desc')
+  ]);
+  if(skillRows) skillRows.forEach(r=>{ if(S.skills[r.skill_id]){ S.skills[r.skill_id].status=r.status||'pending'; S.skills[r.skill_id].clickup_task_id=r.clickup_task_id||''; S.dod[r.skill_id]=r.dod?JSON.parse(r.dod):[false,false,false]; S.skills[r.skill_id].refinamento=r.refinamento||''; S.skills[r.skill_id].refineCtx=r.refine_ctx||''; S.skills[r.skill_id].startedAt=r.started_at||null; }});
+  if(phaseRows) phaseRows.forEach(r=>{ if(S.gestorPhases[r.skill_id]){ S.gestorPhases[r.skill_id][r.gestor]=r.phases?JSON.parse(r.phases):[false,false,false]; if(!S.skills[r.skill_id].notes)S.skills[r.skill_id].notes={}; S.skills[r.skill_id].notes[r.gestor]=r.note||''; }});
+  if(hallRows){ SKILLS.forEach(sk=>{S.hallucinations[sk.id]=[];}); hallRows.forEach(r=>{ if(S.hallucinations[r.skill_id]!==undefined) S.hallucinations[r.skill_id].push({type:r.type,text:r.text,fix:r.fix||'',author:r.author,date:r.created_at?.slice(0,10)||''}); }); }
+  if(decRows) S.decisions=decRows.map(r=>({text:r.text,type:r.type,urgency:r.urgency||'normal',skill:r.skill||'Geral',author:r.author,date:r.created_at?.slice(0,10)||''}));
+  if(outRows){ SKILLS.forEach(sk=>{S.outputs[sk.id]={};}); outRows.forEach(r=>{ if(S.outputs[r.skill_id]!==undefined) S.outputs[r.skill_id][r.gestor]={resultado:r.resultado||'',problemas:r.problemas||'',melhoria:r.melhoria||'',completude:r.completude||null,precisao:r.precisao||null,producao:r.producao!=null?r.producao:null,feedback:r.feedback||'',saved_at:r.created_at?.slice(0,10)||''}; }); }
+  renderNav();renderStats();renderDecs();
+  if(S.selected)renderMain();
+}
+async function syncSkillState(id){ await sbUpsert('skill_states',{skill_id:id,status:S.skills[id].status,clickup_task_id:S.skills[id].clickup_task_id||'',cu_tasks:JSON.stringify(S.skills[id].cu_tasks||{}),dod:JSON.stringify(S.dod[id]),veredito:S.vereditos?.[id]||'',refinamento:S.skills[id].refinamento||'',refine_ctx:S.skills[id].refineCtx||'',started_at:S.skills[id].startedAt||null,updated_at:new Date().toISOString()}); saveLocal(); }
+async function syncGestorPhase(skillId,gestor){ await sbUpsert('gestor_phases',{skill_id:skillId,gestor,phases:JSON.stringify(S.gestorPhases[skillId][gestor]),note:S.skills[skillId]?.notes?.[gestor]||'',updated_at:new Date().toISOString()}); saveLocal(); }
+async function persistHallucination(skillId,entry){ await sbUpsert('hallucinations',{skill_id:skillId,type:entry.type,text:entry.text,fix:entry.fix,author:entry.author,created_at:new Date().toISOString()}); saveLocal(); }
+async function persistDecision(dec){ await sbUpsert('decisions',{text:dec.text,type:dec.type,urgency:dec.urgency,skill:dec.skill,author:dec.author,created_at:new Date().toISOString()}); saveLocal(); }
+async function persistOutput(skillId,gestor,data){ await sbUpsert('gestor_outputs',{skill_id:skillId,gestor,resultado:data.resultado||'',problemas:data.problemas||'',melhoria:data.melhoria||'',completude:data.completude||null,precisao:data.precisao||null,producao:data.producao!=null?data.producao:null,feedback:data.feedback||'',created_at:new Date().toISOString()}); saveLocal(); }
+
+/* ════════════════════════════════════
+   STATE
+════════════════════════════════════ */
+let S = {
+  user:'gustavo', mode:'colaborador', selected:null, selectedGestor:'Richard', decFilter:'all',
+  skills:{}, gestorPhases:{}, dod:{}, hallucinations:{}, decisions:[], outputs:{}, vereditos:{}
+};
+
+function initState(){ if(!S.vereditos)S.vereditos={}; SKILLS.forEach(sk=>{ if(!S.skills[sk.id])S.skills[sk.id]={status:'pending',notes:{},clickup_task_id:'',cu_tasks:{},refinamento:'',refineCtx:'',startedAt:null}; if(!S.skills[sk.id].cu_tasks)S.skills[sk.id].cu_tasks={}; if(S.skills[sk.id].startedAt===undefined)S.skills[sk.id].startedAt=null; if(!S.gestorPhases[sk.id]){S.gestorPhases[sk.id]={};sk.gestores.forEach(g=>{S.gestorPhases[sk.id][g]=[false,false,false];});} if(!S.dod[sk.id])S.dod[sk.id]=[false,false,false]; if(!S.hallucinations[sk.id])S.hallucinations[sk.id]=[]; if(!S.outputs[sk.id])S.outputs[sk.id]={}; if(!S.vereditos[sk.id])S.vereditos[sk.id]=''; }); }
+function saveLocal(){ try{localStorage.setItem('skillops_v30',JSON.stringify(S));}catch(e){} }
+function loadLocal(){
+  try{
+    const sv=localStorage.getItem('skillops_v30')||localStorage.getItem('skillops_v21')||localStorage.getItem('skillops_v2');
+    if(sv){ const p=JSON.parse(sv); Object.assign(S,p);
+      // migrate phases format
+      SKILLS.forEach(sk=>{ if(S.gestorPhases[sk.id]) sk.gestores.forEach(g=>{ const old=S.gestorPhases[sk.id][g]; if(old&&typeof old[0]==='number') S.gestorPhases[sk.id][g]=[old[0]===2,old[1]===2,old[2]===2]; }); });
+    }
+  }catch(e){}
+  if(!S.outputs)S.outputs={};
+  initState();
+  const u=localStorage.getItem('sb_url'),k=localStorage.getItem('sb_key');
+  if(u&&k){SB.url=u;SB.key=k;SB.connected=true;setSBStatus('connected');}
+  const cuk=localStorage.getItem('cu_key');
+  if(cuk){CU.key=cuk;CU.connected=true;setCUStatus('connected');}
+}
+
+/* ════════════════════════════════════
+   HELPERS
+════════════════════════════════════ */
+/* Retorna label de status do ciclo: data de início ou "não iniciado" */
+function getCycleDias(id){
+  const st=S.skills[id]?.startedAt;
+  if(!st)return 'não iniciado';
+  const d=new Date(st);
+  return 'iniciado '+d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+}
+
+const SM={pending:{l:'Pendente',dot:'sd-pending',badge:'b-pending'},active:{l:'Em teste',dot:'sd-active',badge:'b-active'},review:{l:'Aguard. revisão',dot:'sd-review',badge:'b-review'},approved:{l:'Aprovada',dot:'sd-approved',badge:'b-approved'},blocked:{l:'Bloqueada',dot:'sd-blocked',badge:'b-blocked'},paused:{l:'Pausada',dot:'sd-paused',badge:'b-paused'}};
+const DEC_META={estrategico:{label:'Estratégico',dotCls:'dec-dot-estrategico',chipCls:'dtc-estrategico'},tecnico:{label:'Técnico',dotCls:'dec-dot-tecnico',chipCls:'dtc-tecnico'},bloqueio:{label:'Bloqueio',dotCls:'dec-dot-bloqueio',chipCls:'dtc-bloqueio'},aprovacao:{label:'Aprovação',dotCls:'dec-dot-aprovacao',chipCls:'dtc-aprovacao'}};
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function gestoresConcluidos(id){
+  const sk=SKILLS.find(s=>s.id===id);if(!sk)return 0;
+  return sk.gestores.filter(g=>{const ph=S.gestorPhases[id]?.[g]||[false,false,false];const nota=S.skills[id]?.notes?.[g]||'';return ph[0]&&ph[1]&&ph[2]&&nota.trim().length>0;}).length;
+}
+function calcConfidence(id){
+  const total=SKILLS.find(s=>s.id===id)?.gestores.length||7;
+  const concl=gestoresConcluidos(id);
+  const errosCrit=(S.hallucinations[id]||[]).filter(h=>h.type==='Dados incorretos'||h.type==='Métrica inventada').length;
+  const dodPts=(S.dod[id]||[]).filter(v=>v).length;
+  return Math.max(0,Math.round((concl/total)*60+(dodPts/3)*30-Math.min(errosCrit*8,20)));
+}
+function calcProg(id){const total=SKILLS.find(s=>s.id===id)?.gestores.length||7;return total?Math.round(gestoresConcluidos(id)/total*100):0;}
+function dodDone(id){return S.dod[id]&&S.dod[id].every(v=>v);}
+function hasOutput(skillId,gestor){const o=S.outputs[skillId]?.[gestor];return o&&!!(o.resultado||o.problemas||o.feedback);}
+/* ════════════════════════════════════
+   CLICKUP API — Integração Real
+   IDs mapeados do workspace Stark Marketing (36998608)
+   List: Sprint de Validação de Skills — Abril 2026 (901326708252)
+════════════════════════════════════ */
+const CU = {
+  connected: false,
+  key: '',
+  listId: '901326708252', // List já criada em Tráfego Pago
+  listUrl: 'https://app.clickup.com/36998608/v/l/li/901326708252',
+  gestorIds: {
+    'Richard':   '106198813',
+    'Luiz':      '82113995',
+    'Mateus':    '93968187',
+    'Andreyves': '93968188',
+    'Wallison':  '105908986',
+    'Thiago':    '93968189',
+    'Vinicius':  '81956129'
+  }
+};
+
+function cuH(){ return {'Content-Type':'application/json','Authorization':CU.key}; }
+
+function openCUModal(){
+  document.getElementById('cu-key-inp').value = CU.key||'';
+  document.getElementById('cu-modal').classList.add('open');
+}
+function closeCUModal(){ document.getElementById('cu-modal').classList.remove('open'); }
+
+function setCUStatus(s){
+  const p=document.getElementById('cu-pill'),t=document.getElementById('cu-pill-txt');
+  if(!p)return;
+  const cfg={
+    connected:{bc:'var(--grn2)',c:'var(--grn)',t:'ClickUp: conectado'},
+    syncing:  {bc:'var(--acc2)',c:'var(--acc)',t:'ClickUp: conectando...'},
+    error:    {bc:'var(--red2)',c:'var(--red)',t:'ClickUp: erro de key'},
+    idle:     {bc:'var(--cyn2)',c:'var(--cyn)',t:'ClickUp: não configurado'}
+  };
+  const st=cfg[s]||cfg.idle;
+  p.style.borderColor=st.bc; p.style.color=st.c;
+  p.querySelector('.sb-dot').style.background=st.c;
+  t.textContent=st.t;
+}
+
+async function conectarClickUp(){
+  const key=document.getElementById('cu-key-inp').value.trim();
+  if(!key){toast('Cole sua API Key.','warn');return;}
+  setCUStatus('syncing');
+  try{
+    const r=await fetch('https://api.clickup.com/api/v2/user',{headers:{'Authorization':key}});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    CU.key=key; CU.connected=true;
+    localStorage.setItem('cu_key',key);
+    setCUStatus('connected');
+    closeCUModal();
+    toast('ClickUp conectado! Ola, '+(d.user?.username||'usuario')+'. List do sprint ja esta pronta.','ok');
+  }catch(e){
+    setCUStatus('error');
+    toast('Falha ClickUp: '+e.message,'err');
+  }
+}
+
+/* Cria 7 tasks ao iniciar ciclo — uma por gestor, assignada ao ID real */
+async function criarTasksClickUp(skillId){
+  if(!CU.connected||!CU.key) return;
+  const sk=SKILLS.find(s=>s.id===skillId);
+  if(!sk) return;
+  if(!S.skills[skillId].cu_tasks) S.skills[skillId].cu_tasks={};
+  let criadas=0;
+  await Promise.all(sk.gestores.map(async g=>{
+    // Não recriar se já existe
+    if(S.skills[skillId].cu_tasks[g]) return;
+    const aid=CU.gestorIds[g];
+    try{
+      const r=await fetch('https://api.clickup.com/api/v2/list/'+CU.listId+'/task',{
+        method:'POST', headers:cuH(),
+        body:JSON.stringify({
+          name:'Teste de Skill: '+sk.cmd+' \u2014 '+g,
+          description:'Skill: '+sk.cmd+'\nGestor: '+g+'\nCiclo '+sk.ciclo+' · '+getCycleDias(sk.id)+'\n\nRegistre o output no STARK SKILL/OPS v3.3.',
+          assignees: aid ? [parseInt(aid)] : []
+        })
+      });
+      const d=await r.json();
+      if(d.id){ S.skills[skillId].cu_tasks[g]=d.id; criadas++; }
+    }catch(e){ console.warn('ClickUp task erro para '+g,e); }
+  }));
+  saveLocal(); syncSkillState(skillId);
+  if(criadas>0){
+    toast('\u2713 '+criadas+'/'+sk.gestores.length+' tasks criadas no ClickUp para '+sk.cmd+'!','ok');
+    // Atualiza status no cu-strip
+    const el=document.getElementById('cu-sync-status-'+skillId);
+    if(el) el.textContent='\u2713 '+criadas+' tasks criadas \u2014 ver em Trafego Pago';
+  }
+}
+
+/* Verifica se gestor concluiu TODAS as 4 etapas */
+function gestorConcluiuTudo(skillId,gestor){
+  const ph=S.gestorPhases[skillId]?.[gestor]||[false,false,false];
+  return ph[0]&&ph[1]&&ph[2] && hasOutput(skillId,gestor) && dodDone(skillId);
+}
+
+/* Marca task do gestor como Concluida via API */
+async function dispararConclusaoClickUp(skillId,gestor){
+  const taskId=S.skills[skillId]?.cu_tasks?.[gestor];
+  if(!CU.connected){
+    toast('\u2713 '+gestor+' concluiu todas as etapas! Configure o ClickUp para sync automatico.','ok');
+    return;
+  }
+  if(!taskId){
+    toast('\u2713 '+gestor+' concluiu! (Inicie o ciclo para gerar as tasks no ClickUp)','warn');
+    return;
+  }
+  try{
+    // Busca os statuses da list para encontrar o "done/closed"
+    const lr=await fetch('https://api.clickup.com/api/v2/list/'+CU.listId,{headers:cuH()});
+    const ld=await lr.json();
+    const statuses=ld.statuses||[];
+    const done=statuses.find(s=>s.type==='closed')
+      || statuses.find(s=>/(complete|done|conclu|feito)/i.test(s.status));
+    const statusName=done?.status||'complete';
+    const r=await fetch('https://api.clickup.com/api/v2/task/'+taskId,{
+      method:'PUT', headers:cuH(),
+      body:JSON.stringify({status:statusName})
+    });
+    if(r.ok){
+      toast('\u2713 '+gestor+' \u2014 task marcada como Conclu\u00edda no ClickUp!','ok');
+    } else {
+      toast('\u2713 '+gestor+' concluiu todas as etapas!','ok');
+    }
+  }catch(e){
+    toast('\u2713 '+gestor+' concluiu! (ClickUp offline: '+e.message+')','warn');
+  }
+}
+
+/* ════════════════════════════════════
+   MODE + USER
+════════════════════════════════════ */
+function setMode(m){
+  S.mode=m; saveLocal();
+  document.getElementById('mode-colab').classList.toggle('on',m==='colaborador');
+  document.getElementById('mode-colab').classList.toggle('colaborador',m==='colaborador');
+  document.getElementById('mode-ctrl').classList.toggle('on',m==='controlador');
+  document.getElementById('mode-ctrl').classList.toggle('controlador',m==='controlador');
+  const rp=document.getElementById('right-panel');
+  const mg=document.getElementById('main-grid');
+  if(m==='controlador'){rp.style.display='none';mg.classList.add('ctrl-mode');}
+  else{rp.style.display='';mg.classList.remove('ctrl-mode');}
+  renderMain();
+}
+
+function setUser(u){
+  S.user=u;saveLocal();
+  document.getElementById('btn-g').classList.toggle('on',u==='gustavo');
+  document.getElementById('btn-a').classList.toggle('on',u==='amanda');
+  // Se é gestor (não head), forçar modo colaborador
+  if(u!=='gustavo'&&u!=='amanda'&&S.mode==='controlador')setMode('colaborador');
+  toast(`Sessão: ${u==='gustavo'?'Gustavo':u==='amanda'?'Amanda':u}`,'ok');
+  if(S.selected)renderMain();
+}
+
+/* ════════════════════════════════════
+   NAV + STATS
+════════════════════════════════════ */
+function renderNav(){
+  const nav=document.getElementById('skill-nav');nav.innerHTML='';
+  SKILLS.forEach(sk=>{
+    const st=S.skills[sk.id]?.status||'pending';const sm=SM[st];const prog=calcProg(sk.id);
+    const el=document.createElement('div');el.className='sk-item'+(S.selected===sk.id?' sel':'');
+    el.onclick=()=>selectSkill(sk.id);
+    el.innerHTML=`<div class="sk-row"><div class="sdot ${sm.dot}"></div><div class="sk-cmd">${esc(sk.cmd)}</div><div class="sk-cyc">C${sk.ciclo}</div></div><div style="font-family:var(--mono);font-size:8px;color:var(--t3);margin-left:15px;">${esc(getCycleDias(sk.id))}</div><div class="mini-bar"><div class="mini-fill" style="width:${prog}%;background:${st==='approved'?'var(--grn)':st==='active'?'var(--acc)':'var(--b3)'}"></div></div>`;
+    nav.appendChild(el);
+  });
+}
+
+function renderStats(){
+  let aprov=0,ativas=0,pend=0,bloq=0,act='—';
+  SKILLS.forEach(sk=>{const st=S.skills[sk.id]?.status||'pending';if(st==='approved')aprov++;else if(st==='active'){ativas++;act=`C${sk.ciclo}`;}else if(st==='pending')pend++;else if(st==='blocked')bloq++;});
+  document.getElementById('s-ciclo').textContent=act;document.getElementById('s-aprov').textContent=aprov;document.getElementById('s-ativas').textContent=ativas;document.getElementById('s-pend').textContent=pend;document.getElementById('s-bloq').textContent=bloq;
+  const bar=document.getElementById('sprint-bar');bar.innerHTML='';
+  SKILLS.forEach(sk=>{const st=S.skills[sk.id]?.status||'pending';const seg=document.createElement('div');seg.className='sprint-seg'+(st==='approved'?' done':st==='active'?' active':'');seg.title=sk.cmd;bar.appendChild(seg);});
+}
+
+/* ════════════════════════════════════
+   SELECT + MAIN ROUTER
+════════════════════════════════════ */
+function selectSkill(id){S.selected=id;saveLocal();renderNav();renderMain();}
+
+function renderMain(){
+  if(S.mode==='controlador') renderControlador();
+  else renderColaborador();
+}
+
+/* ════════════════════════════════════
+   MODO COLABORADOR
+════════════════════════════════════ */
+function renderColaborador(){
+  const id=S.selected;
+  const content=document.getElementById('content');
+  if(!id){content.innerHTML='<div class="empty-state"><div class="empty-icon">◈</div><div class="empty-txt">Selecione uma skill no painel esquerdo</div></div>';return;}
+  const sk=SKILLS.find(s=>s.id===id);
+  const st=S.skills[id]?.status||'pending';const sm=SM[st];
+  const depSk=sk.dep?SKILLS.find(s=>s.id===sk.dep):null;
+  const depOk=depSk?(S.skills[depSk.id]?.status==='approved'):true;
+  const activeOther=SKILLS.filter(s=>S.skills[s.id]?.status==='active'&&s.id!==id);
+  const wip=activeOther.length>0&&st!=='active';
+  const fontes=sk.fontes.map(f=>`<span class="ftag">◈ ${esc(f)}</span>`).join('');
+  const taskId=S.skills[id]?.clickup_task_id||'';
+
+  content.innerHTML=`
+    ${wip?`<div class="wip-warn">⚠ WIP LIMIT: ${esc(activeOther[0].cmd)} está ativa. Conclua antes de iniciar este ciclo.</div>`:''}
+    ${depSk&&!depOk?`<div class="dep-warn">⚠ DEPENDÊNCIA: ${esc(depSk.cmd)} precisa estar Aprovada primeiro.</div>`:''}
+    <div class="sk-hdr">
+      <div style="flex:1;"><div class="sk-title">${esc(sk.cmd)}</div>
+        <div class="sk-meta"><span>Ciclo ${sk.ciclo}</span><span>${esc(getCycleDias(sk.id))}</span><span>${fontes}</span></div>
+        <div class="sk-obj">${esc(sk.obj)}</div></div>
+      <div class="badge ${sm.badge}">${sm.l}</div>
+    </div>
+    <!-- Seletor de gestor -->
+    <div class="gestor-selector-bar">
+      <span class="gs-lbl">Você é:</span>
+      <select class="gs-sel" id="gestor-sel" onchange="setGestor(this.value)">
+        ${ALL_GESTORES.map(g=>`<option value="${g}" ${S.selectedGestor===g?'selected':''}>${g}</option>`).join('')}
+      </select>
+      <span class="gs-chip">◈ ${esc(S.selectedGestor)}</span>
+    </div>
+    <!-- ClickUp status -->
+    <div class="cu-strip">
+      <span class="cu-lbl">◈ ClickUp</span>
+      <span id="cu-sync-status-${id}" style="font-family:var(--mono);font-size:10px;color:var(--t3);">${CU.connected?'Tasks criadas automaticamente ao iniciar ciclo':'Configure o ClickUp no header para automação'}</span>
+    </div>
+    <!-- Banner de aviso -->
+    <div class="uso-banner">⚠ AVISO: Esta ferramenta é exclusiva para REGISTRO E CONTROLE. A execução das skills deve ocorrer obrigatoriamente no Claude Cowork.</div>
+    <!-- Tabs colaborador -->
+    <div class="tabs">
+      <div class="tab on" onclick="swColabTab('processo','${id}',this)">Processos</div>
+      <div class="tab" onclick="swColabTab('output','${id}',this)" data-tab="output">Registro de Output</div>
+      <div class="tab" onclick="swColabTab('checklist','${id}',this)" data-tab="checklist">Checklist & DoD</div>
+    </div>
+    <div id="colab-tab-${id}">${renderProcesso(sk)}</div>
+  `;
+}
+
+function setGestor(g){S.selectedGestor=g;saveLocal();if(S.selected&&S.mode==='colaborador')renderColaborador();}
+
+function swColabTab(tab,id,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));el.classList.add('on');
+  const tc=document.getElementById(`colab-tab-${id}`);const sk=SKILLS.find(s=>s.id===id);
+  if(tab==='processo')tc.innerHTML=renderProcesso(sk);
+  else if(tab==='checklist')tc.innerHTML=renderCollabChecklist(id);
+  else if(tab==='output')tc.innerHTML=renderOutputRegistro(id);
+}
+
+/* Processo — 3 passos universais */
+const PROCESSOS_UNIVERSAIS = {
+  'analisar':{
+    prep:'Identifique o cliente a analisar. A skill coleta tudo via MCP Meta Ads — nenhum CSV manual necessário. Confirme que o conector Meta Ads está ativo no Claude Cowork e que o projeto do cliente está configurado. Período fixo: últimos 7 dias a partir da data de execução.',
+    exec:'No Claude Cowork, invoque /analisar-campanhas e informe o cliente. A skill coletará automaticamente: TOFU (custo por seguidor — benchmark ≤ R$1,50 OK / R$1,50–3,00 atenção / >R$3,00 crítico), MOFU (CTR benchmark >1,5%, cobertura dos 3 tipos de criativo, frequência ≤ 3) e BOFU (CPL benchmark R$7–R$12, volume semanal ~30 leads). Também verificará criativos rejeitados e campanhas com zero resultado. Ao final cria automaticamente uma task no ClickUp na lista "Otimização Campanhas Meta Ads" com o diagnóstico completo.'
+  },
+  'status-report':{
+    prep:'Identifique o cliente e o período a cobrir (sugestão: última semana). Esta skill documenta AÇÕES do gestor — não métricas de performance. Se quiser métricas, use /analisar-campanhas. Confirme que os conectores Meta Ads e ClickUp estão ativos.',
+    exec:'No Claude Cowork, invoque /preencher-status-report. A skill coletará automaticamente via MCP Meta Ads o histórico de alterações (anúncios pausados/criados, conjuntos criados, ajustes de orçamento) e cruzará com tarefas concluídas no ClickUp (listas "Criativos a Subir no ADS" e "Otimização Campanhas"). Montará um draft estruturado — tabela de criativos subidos, otimizações executadas e ajustes de orçamento — para você revisar. Após aprovação, cria a task automaticamente na lista "Status Report" do ClickUp.'
+  },
+  'relatorio':{
+    prep:'Identifique o(s) cliente(s) a processar. A skill detecta a granularidade automaticamente pelo dia do mês ou pelo que você indicar (semanal/quinzenal/mensal/trimestral). Você pode processar um único cliente (ex: /relatorio-trafego Dr. Marcus) ou múltiplos em lote. Confirme que o MCP Reportei está conectado.',
+    exec:'No Claude Cowork, invoque /relatorio-trafego [nome do cliente]. A skill buscará o projeto no Reportei, identificará integrações de tráfego (fb_ads / google_ads), coletará métricas do período atual e comparativo, pesquisará contexto de mercado e benchmark de CPL por especialidade (cirurgia plástica R$6–15, ortognática R$20–50, dermatologia R$10–25, implantes R$25–55), diagnosticará as causas das variações, gerará a narrativa HTML para a Linha do Tempo, criará o relatório com template Tráfego 3.0 e entregará mensagem formatada para WhatsApp. Em modo lote, apresenta log de execução ao final.'
+  },
+  'otimizar':{
+    prep:'PRÉ-REQUISITO obrigatório: /analisar-campanhas deve estar aprovada neste ciclo. O output da análise é insumo direto para os 3 sub-agentes desta skill. Confirme que o conector MCP Meta Ads está ativo. Esta skill afeta diretamente os investimentos dos clientes — não execute sem o contexto da análise.',
+    exec:'No Claude Cowork, invoque /otimizar-campanhas. Três sub-agentes especializados atuam em paralelo: TOFU (avalia CPS, pausa anúncios críticos >R$3,00, escala os com CPS ≤ R$1,50), MOFU (verifica CTR, cobertura de criativos e frequência) e BOFU (CPL vs. benchmark, campanhas com zero resultado). Ações seguras são executadas automaticamente; decisões críticas (redistribuição de budget, novos públicos, escalonamento de campanhas) aguardam sua aprovação explícita. Avalie cada sugestão antes de confirmar — especialmente as que envolvem aumento de investimento.'
+  },
+  'agenda-conteudo':{
+    prep:'Identifique o cliente. A skill busca os criativos diretamente no ClickUp (lista Agenda 3.0, ID: 901324888130) — não é necessário exportar manualmente. Esteja pronto para confirmar a lista de criativos elegíveis e, se necessário, acessar o feed do Instagram para localizar o post pelo link/URL.',
+    exec:'No Claude Cowork, invoque /testar-agenda-conteudo e informe o cliente. A skill coletará: Etapa do Funil, CTA, Formato (Post/Reels), Data de postagem, Headline e Procedimento de cada task. Filtrará automaticamente por elegibilidade (inclui: educacional, antes/depois, depoimentos, quebra de objeção | exclui: viral, meme, influencer, engajamento vazio). Após sua confirmação, localizará o criativo no feed do Instagram e subirá na campanha ABO do funil correspondente (nome: [Data]-[Headline]-Teste, R$6/dia, 1 criativo por conjunto). Atualizará o status no ClickUp ao final.'
+  },
+  'darkposts':{
+    prep:'Identifique o cliente. A skill busca automaticamente as tasks pendentes na lista "Criativos a Subir no ADS" (ClickUp ID: 901304117561) com Área de Destino = Tráfego Pago. Confirme que os arquivos estão no Google Drive nos formatos corretos: MP4 para vídeo, JPG/PNG para imagem.',
+    exec:'No Claude Cowork, invoque /testar-darkposts e informe o cliente. A skill listará as tasks pendentes do ClickUp, acessará os arquivos no Drive, apresentará a lista para sua confirmação e subirá cada darkpost em conjunto ABO (nome: [Data]-[Nome]-Darkpost, R$6/dia, 1 criativo). Darkposts com CTA de agendamento de consulta vão para BOFU por padrão, salvo indicação no briefing. Após upload, atualizará o ClickUp (pendente → em teste) com data, campanha e ID do conjunto. VERIFICAÇÃO HUMANA OBRIGATÓRIA: conjunto correto? URL? Pixel disparando? Criativo em veiculação?'
+  },
+  'preencher-planilha':{
+    prep:'Identifique o cliente a preencher. A skill acessa o Reportei via Claude in Chrome — confirme que o Claude in Chrome está ativo e que você tem acesso a app.reportei.com. A planilha master tem URL fixa. Período: semana anterior (segunda a domingo). Exemplo: se hoje é 02/04/2026 (quinta) → semana = 23/03 a 29/03.',
+    exec:'No Claude Cowork, invoque /preencher-planilha e confirme o cliente. A skill acessará app.reportei.com via Claude in Chrome, abrirá o overview "MODELO", selecionará o período da semana anterior e coletará: Gasto Meta (col. C), Conversas (col. E), Seguidores Instagram (col. F), Gasto Google (col. H), Leads Google (col. K) e Leads Google Ads (col. O). Em seguida abrirá a planilha master, navegará à aba mais recente (última à direita, formato DD/MM/AAAA), localizará a linha do cliente na col. A e preencherá apenas as 6 colunas definidas. NUNCA toca nas colunas D, I, J, L, M, N, P (fórmulas).'
+  },
+  'relatorio-semanal':{
+    prep:'Identifique o(s) cliente(s) Stark a processar. Sem indicação, a skill listará todos os projetos da empresa (Company ID: 206673) e aguardará sua escolha. Período padrão: últimos 7 dias (terça-feira → segunda a domingo anterior). Confirme que o MCP Reportei está conectado. ATENÇÃO: slugs reais dos clientes Stark são facebook_ads e google_adwords — diferentes dos projetos genéricos.',
+    exec:'No Claude Cowork, invoque /relatorio-semanal-stark [nome do cliente]. A skill detectará a granularidade, fará list_projects e match pelo sobrenome do cliente, chamará list_integrations para identificar os slugs reais (facebook_ads/google_adwords), coletará métricas do período atual e comparativo via get_metrics, pesquisará contexto de mercado e benchmark de CPL, aplicará diagnóstico causal, montará a narrativa e publicará na Linha do Tempo do Reportei. Ao final entrega mensagem de WhatsApp formatada por cliente, pronta para envio. Em modo lote, apresenta log de execução completo.'
+  }
+};
+function renderProcesso(sk){
+  const p=PROCESSOS_UNIVERSAIS[sk.id]||{prep:'Extraia os dados necessários conforme a definição da skill.',exec:'Execute a skill no Claude Cowork e colete o resultado.'};
+  const passos=[
+    {n:'Preparação',d:'Extração de dados e briefing.',det:p.prep},
+    {n:'Execução',d:'Rodar a skill no Claude Cowork e coletar o resultado.',det:p.exec},
+    {n:'Apresentação na Daily',d:'Discussão técnica com os controladores.',det:'Apresente o output gerado na daily. Esteja preparado para discutir o que a skill acertou, o que errou e sugestões de melhoria. Registre o output na aba "Registro de Output" antes da daily.'}
+  ];
+  return passos.map((s,i)=>`<div class="step"><div class="step-num">${i+1}</div><div class="step-body"><div class="step-title">${s.n}</div><div class="step-desc">${s.d}</div><div class="step-det">${s.det}</div></div></div>`).join('');
+}
+
+/* Checklist unificado — fases de execução + DoD + nota */
+function renderCollabChecklist(id){
+  const g=S.selectedGestor;
+  const ph=S.gestorPhases[id]?.[g]||[false,false,false];
+  const dod=S.dod[id]||[false,false,false];
+  const savedNote=S.skills[id]?.notes?.[g]||'';
+  const nk=`${id}_${g}`;
+  const allPhasesDone=ph[0]&&ph[1]&&ph[2];
+  const allDodDone=dod.every(v=>v);
+  const hasOut=hasOutput(id,g);
+  const cicloCompleto=allPhasesDone&&allDodDone&&hasOut;
+
+  const phasesDone=ph.filter(v=>v).length;
+  const dodDoneCount=dod.filter(v=>v).length;
+
+  const phaseItems=CHECKLIST_LABELS.map((cl,i)=>`
+    <div class="chk-item${ph[i]?' done-item':''}" onclick="toggleGestorCheck('${id}','${g}',${i})">
+      <div class="chk-box${ph[i]?' done':''}"></div>
+      <div class="chk-lbl-wrap">
+        <div class="chk-lbl${ph[i]?' done-lbl':''}">${cl.lbl}</div>
+        <div class="chk-sub">${cl.sub}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const dodItems=DOD_ITEMS.map((it,i)=>`
+    <div class="chk-item${dod[i]?' done-item':''}" onclick="toggleDod('${id}',${i})">
+      <div class="chk-box${dod[i]?' done':''}"></div>
+      <div class="chk-lbl-wrap">
+        <div class="chk-lbl${dod[i]?' done-lbl':''}">${it.txt}</div>
+        <div class="chk-sub">${it.sub}</div>
+      </div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="collab-checklist">
+
+      <!-- Seção 1: Fases de execução -->
+      <div class="chk-sec-ttl">◈ Fases de Execução <span style="color:var(--t3);font-size:8px;font-weight:400;">${phasesDone}/3</span></div>
+      ${phaseItems}
+
+      <!-- Seção 2: DoD (critérios de conclusão) -->
+      <div class="chk-sec-ttl">◈ Critérios de Conclusão (DoD) <span style="color:var(--t3);font-size:8px;font-weight:400;">${dodDoneCount}/3</span></div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--t3);padding:6px 8px;background:var(--bg3);border:1px solid var(--b1);border-radius:2px;margin-bottom:8px;">
+        ℹ Confirme abaixo antes da daily. Output registrado é obrigatório para marcar o ciclo como concluído.
+      </div>
+      ${dodItems}
+
+      <!-- Seção 3: Nota para a daily -->
+      <div class="chk-sec-ttl">◈ Observações para a Daily</div>
+      <div class="collab-note-area">
+        <textarea class="collab-ta" id="ta_${nk}" placeholder="Resuma em 2–3 linhas: o que a skill acertou, o que errou e se usaria em produção. Esta nota aparece na daily.">${esc(savedNote)}</textarea>
+        <button class="collab-save-btn" onclick="saveNote('${id}','${g}','${nk}')">Salvar Nota</button>
+      </div>
+
+      <!-- Status do ciclo -->
+      <div style="margin-top:16px;padding:10px 12px;background:var(--bg3);border:1px solid var(--b1);border-radius:3px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div style="flex:1;">
+          <div style="font-family:var(--mono);font-size:10px;color:${allPhasesDone?'var(--grn)':'var(--t3)'};">${allPhasesDone?'✓':'○'} Fases completas</div>
+          <div style="font-family:var(--mono);font-size:10px;color:${hasOut?'var(--grn)':'var(--t3)'};">${hasOut?'✓':'○'} Output registrado</div>
+          <div style="font-family:var(--mono);font-size:10px;color:${allDodDone?'var(--grn)':'var(--t3)'};">${allDodDone?'✓':'○'} DoD completo</div>
+        </div>
+        ${cicloCompleto
+          ?`<div class="cycle-done-chip">✓ Ciclo concluído — task ClickUp será marcada como feita</div>`
+          :`<div style="font-family:var(--mono);font-size:9px;color:var(--t3);">${[!allPhasesDone&&'Fases pendentes',!hasOut&&'Output não registrado',!allDodDone&&'DoD incompleto'].filter(Boolean).join(' · ')}</div>`
+        }
+      </div>
+
+    </div>
+  `;
+}
+
+/* Registro de Output — com avaliação estruturada */
+function renderOutputRegistro(id){
+  const g=S.selectedGestor;
+  const saved=S.outputs[id]?.[g]||{};
+  const hasSaved=!!(saved.resultado||saved.problemas);
+  const sk=SKILLS.find(s=>s.id===id);
+
+  function evalOptCls(field,val){
+    if(!saved[field]&&saved[field]!==false)return '';
+    if(saved[field]===val) {
+      if(field==='producao')return val===true?'ev-grn':'ev-red';
+      if(field==='completude')return val==='completo'?'ev-grn':val==='parcial'?'ev-acc':'ev-red';
+      if(field==='precisao')return val==='ok'?'ev-grn':val==='impreciso'?'ev-acc':'ev-red';
+    }
+    return '';
+  }
+
+  const evalComp=saved.completude;const evalPrec=saved.precisao;const evalProd=saved.producao;
+  const evalSummaryChips=[
+    evalComp?`<span class="eval-chip ${evalComp==='completo'?'ec-grn':evalComp==='parcial'?'ec-acc':'ec-red'}">${evalComp==='completo'?'Completo':evalComp==='parcial'?'Parcial':'Incompleto'}</span>`:'',
+    evalPrec?`<span class="eval-chip ${evalPrec==='ok'?'ec-grn':evalPrec==='impreciso'?'ec-acc':'ec-red'}">${evalPrec==='ok'?'Dados OK':evalPrec==='impreciso'?'Impreciso':'Inventou'}</span>`:'',
+    evalProd!=null?`<span class="eval-chip ${evalProd?'ec-grn':'ec-red'}">${evalProd?'Produção ✓':'Produção ✕'}</span>`:''
+  ].filter(Boolean).join(' ');
+
+  return `
+    <div class="output-registro-wrap">
+      <!-- Cabeçalho -->
+      <div class="output-reg-hdr">
+        <div>
+          <div style="font-family:var(--mono);font-size:11px;font-weight:600;color:var(--t1);">Registro de Output — ${esc(g)}</div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:2px;">${esc(sk.cmd)} · ${esc(getCycleDias(sk.id))}</div>
+          ${evalSummaryChips?`<div style="margin-top:5px;">${evalSummaryChips}</div>`:''}
+        </div>
+        ${hasSaved
+          ?`<div style="font-family:var(--mono);font-size:9px;color:var(--grn);background:rgba(46,204,113,.1);border:1px solid var(--grn2);padding:3px 9px;border-radius:2px;">✓ Salvo · ${esc(saved.saved_at||'')}</div>`
+          :'<div style="font-family:var(--mono);font-size:9px;color:var(--t3);">Não salvo</div>'}
+      </div>
+
+      <!-- Output bruto -->
+      <div class="output-main-block">
+        <div class="output-main-lbl">
+          <span>◈ Output gerado pela skill</span>
+          <span style="font-size:9px;color:var(--t3);font-weight:400;">Cole exatamente o que o Claude Cowork gerou</span>
+        </div>
+        <textarea class="output-ta output-ta-main" id="out-resultado-${id}"
+          placeholder="Cole o output completo aqui. Quanto mais completo, melhor para a liderança validar a skill.">${esc(saved.resultado||'')}</textarea>
+      </div>
+
+      <!-- Avaliação estruturada -->
+      <div class="eval-grid">
+        <div class="eval-item">
+          <div class="eval-item-lbl">Completude do output</div>
+          <div class="eval-opts" data-eval-group="${id}-completude">
+            <button class="eval-opt ${evalOptCls('completude','completo')}" data-eval-val="completo" onclick="setEval('${id}','${g}','completude','completo',this)">✓ Completo — entregou tudo esperado</button>
+            <button class="eval-opt ${evalOptCls('completude','parcial')}" data-eval-val="parcial" onclick="setEval('${id}','${g}','completude','parcial',this)">⚠ Parcial — faltou algo relevante</button>
+            <button class="eval-opt ${evalOptCls('completude','incompleto')}" data-eval-val="incompleto" onclick="setEval('${id}','${g}','completude','incompleto',this)">✕ Incompleto — não entregou o esperado</button>
+          </div>
+        </div>
+        <div class="eval-item">
+          <div class="eval-item-lbl">Precisão dos dados</div>
+          <div class="eval-opts" data-eval-group="${id}-precisao">
+            <button class="eval-opt ${evalOptCls('precisao','ok')}" data-eval-val="ok" onclick="setEval('${id}','${g}','precisao','ok',this)">✓ Dados corretos e consistentes</button>
+            <button class="eval-opt ${evalOptCls('precisao','impreciso')}" data-eval-val="impreciso" onclick="setEval('${id}','${g}','precisao','impreciso',this)">⚠ Impreciso — análise equivocada</button>
+            <button class="eval-opt ${evalOptCls('precisao','inventou')}" data-eval-val="inventou" onclick="setEval('${id}','${g}','precisao','inventou',this)">✕ Inventou métricas / dados</button>
+          </div>
+        </div>
+        <div class="eval-item">
+          <div class="eval-item-lbl">Aplicabilidade em produção</div>
+          <div class="eval-opts" data-eval-group="${id}-producao">
+            <button class="eval-opt ${evalOptCls('producao',true)}" data-eval-val="true" onclick="setEval('${id}','${g}','producao',true,this)">✓ Sim — usaria sem edição</button>
+            <button class="eval-opt ${evalOptCls('producao',false)}" data-eval-val="false" onclick="setEval('${id}','${g}','producao',false,this)">✕ Não — precisa de ajuste</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Problemas + Melhoria -->
+      <div class="output-secondary-block">
+        <div class="output-secondary-lbl">Problemas identificados</div>
+        <textarea class="output-ta output-ta-secondary" id="out-problemas-${id}"
+          placeholder="Descreva os problemas específicos encontrados: dados incorretos, lógica errada, faltou contexto de nicho, etc.">${esc(saved.problemas||saved.feedback||'')}</textarea>
+      </div>
+      <div class="output-secondary-block" style="margin-top:8px;">
+        <div class="output-secondary-lbl">Sugestão de melhoria do prompt</div>
+        <textarea class="output-ta" style="min-height:60px;" id="out-melhoria-${id}"
+          placeholder="Como o prompt da skill deveria ser ajustado para corrigir os problemas acima?">${esc(saved.melhoria||'')}</textarea>
+      </div>
+
+      <!-- Ações -->
+      <div class="output-actions">
+        <button class="output-save-btn" onclick="saveOutput('${id}','${g}')">◈ Salvar Registro</button>
+        <button class="btn-export" onclick="exportOutput('${id}','${g}')">↑ Exportar Relatório</button>
+        <button class="btn-prompt" onclick="gerarPromptAnalise('${id}','${g}')">◈ Gerar Prompt para Claude</button>
+        <button class="btn-delete" onclick="deleteOutput('${id}','${g}')">✕ Apagar Registro</button>
+      </div>
+
+      <!-- Bloco do prompt gerado -->
+      <div class="prompt-block" id="prompt-block-${id}">
+        <div class="prompt-block-lbl">
+          <span>Prompt pronto para colar no Claude Cowork</span>
+          <button style="font-family:var(--mono);font-size:8px;padding:2px 8px;border:1px solid var(--cyn2);background:rgba(74,184,216,.1);color:var(--cyn);border-radius:2px;cursor:pointer;" onclick="copyPromptBlock('${id}')">Copiar</button>
+        </div>
+        <pre class="prompt-pre" id="prompt-pre-${id}"></pre>
+      </div>
+
+    </div>
+  `;
+}
+
+async function saveOutput(id,g){
+  const r=document.getElementById(`out-resultado-${id}`);
+  const p=document.getElementById(`out-problemas-${id}`);
+  const m=document.getElementById(`out-melhoria-${id}`);
+  if(!r)return;
+  // Preserva campos de eval já marcados no state
+  const prev=S.outputs[id]?.[g]||{};
+  const data={
+    resultado:r.value.trim(),
+    problemas:p?.value.trim()||'',
+    melhoria:m?.value.trim()||'',
+    completude:prev.completude!=null?prev.completude:null,
+    precisao:prev.precisao!=null?prev.precisao:null,
+    producao:prev.producao!=null?prev.producao:null,
+    feedback:p?.value.trim()||'', // backward compat
+    saved_at:new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'})
+  };
+  if(!S.outputs[id])S.outputs[id]={};
+  S.outputs[id][g]=data;
+  await persistOutput(id,g,data);
+  toast('Registro salvo!','ok');
+  const tc=document.getElementById(`colab-tab-${id}`);
+  if(tc)tc.innerHTML=renderOutputRegistro(id);
+  // Verifica conclusão completa → dispara ClickUp
+  if(gestorConcluiuTudo(id,g)){
+    await dispararConclusaoClickUp(id,g);
+  }
+}
+
+/* Eval sem re-render completo — atualiza state + botões via DOM */
+function setEval(id,g,field,val,btn){
+  if(!S.outputs[id])S.outputs[id]={};
+  if(!S.outputs[id][g])S.outputs[id][g]={};
+  // Parse booleano vindo do HTML
+  if(val==='true')val=true;else if(val==='false')val=false;
+  // Toggle: clicou no mesmo valor → desmarca
+  const cur=S.outputs[id][g][field];
+  const sameVal=(field==='producao')?(cur===val):(cur===val);
+  S.outputs[id][g][field]=sameVal?null:val;
+  saveLocal();
+  // Atualiza visual do grupo sem re-render
+  const group=btn.closest('[data-eval-group]');
+  if(group){
+    group.querySelectorAll('.eval-opt').forEach(b=>{b.classList.remove('ev-grn','ev-acc','ev-red');});
+    const chosen=S.outputs[id][g][field];
+    if(chosen!=null){
+      group.querySelectorAll('.eval-opt').forEach(b=>{
+        let bv=b.dataset.evalVal;
+        if(bv==='true')bv=true;else if(bv==='false')bv=false;
+        if(bv===chosen){
+          let cls='';
+          if(field==='producao')cls=chosen===true?'ev-grn':'ev-red';
+          else if(field==='completude')cls=chosen==='completo'?'ev-grn':chosen==='parcial'?'ev-acc':'ev-red';
+          else if(field==='precisao')cls=chosen==='ok'?'ev-grn':chosen==='impreciso'?'ev-acc':'ev-red';
+          b.classList.add(cls);
+        }
+      });
+    }
+  }
+}
+
+/* Copia relatório estruturado para clipboard */
+function exportOutput(id,g){
+  const o=S.outputs[id]?.[g];
+  if(!o||(!o.resultado&&!o.problemas)){toast('Nenhum registro encontrado. Salve o output primeiro.','warn');return;}
+  const sk=SKILLS.find(s=>s.id===id);
+  const sep='─'.repeat(50);
+  const evalLine=[
+    o.completude?`Completude: ${o.completude}`:'',
+    o.precisao?`Precisão dos dados: ${o.precisao}`:'',
+    o.producao!=null?`Aplicável em produção: ${o.producao?'sim':'não'}`:''
+  ].filter(Boolean).join('  |  ');
+  const txt=[
+    'STARK SKILL/OPS — Registro de Validação',sep,
+    `Skill:   ${sk.cmd}`,
+    `Gestor:  ${g}`,
+    `Data:    ${o.saved_at||new Date().toLocaleDateString('pt-BR')}`,sep,
+    '',
+    o.resultado?'[ OUTPUT GERADO PELA SKILL ]\n'+o.resultado:'(sem output)',
+    '',
+    evalLine?'[ AVALIAÇÃO ]\n'+evalLine:'',
+    '',
+    o.problemas?'[ PROBLEMAS IDENTIFICADOS ]\n'+o.problemas:'',
+    '',
+    o.melhoria?'[ SUGESTÃO DE MELHORIA DO PROMPT ]\n'+o.melhoria:''
+  ].filter(l=>l!==undefined).join('\n').trim();
+  navigator.clipboard.writeText(txt)
+    .then(()=>toast('Relatório copiado para a área de transferência!','ok'))
+    .catch(()=>toast('Falha ao copiar — verifique permissões do browser.','err'));
+}
+
+/* Gera prompt pronto para colar no Claude Cowork e analisar o output */
+function gerarPromptAnalise(id,g){
+  const o=S.outputs[id]?.[g];
+  if(!o||(!o.resultado&&!o.problemas)){toast('Salve o output antes de gerar o prompt.','warn');return;}
+  const sk=SKILLS.find(s=>s.id===id);
+  const evalCtx=[
+    o.completude?`• Completude: ${o.completude}.`:'',
+    o.precisao?`• Precisão dos dados: ${o.precisao}.`:'',
+    o.producao!=null?`• Aplicabilidade em produção: ${o.producao?'sim — usaria sem edição':'não — precisa de ajuste'}.`:''
+  ].filter(Boolean).join('\n');
+  const originalCtx=SKILL_KNOWLEDGE[id]||`Nome: ${sk.cmd}\nObjetivo: ${sk.obj}`;
+  const prompt=
+`Você é um especialista em otimização de skills para o Claude em agências de tráfego pago no nicho de saúde médica brasileira (odontologia, cirurgia plástica, saúde metabólica).
+
+A skill abaixo foi testada por um gestor de tráfego. Analise o output gerado e os problemas reportados, depois proponha melhorias precisas para o SKILL.md.
+
+## SKILL TESTADA
+${sk.cmd}
+${originalCtx}
+
+## OUTPUT GERADO PELA SKILL
+${o.resultado||'(não registrado)'}
+
+${evalCtx?`## AVALIAÇÃO DO GESTOR\n${evalCtx}\n`:''}${o.problemas?`## PROBLEMAS IDENTIFICADOS\n${o.problemas}\n`:''}${o.melhoria?`## SUGESTÃO INICIAL DO GESTOR\n${o.melhoria}\n`:''}
+## SUA TAREFA
+1. Diagnostique a causa raiz de cada problema reportado.
+2. Proponha alterações específicas e cirúrgicas no SKILL.md que corrijam cada problema.
+3. Adicione restrições e exemplos concretos para prevenir reincidência.
+4. Retorne o SKILL.md revisado completo, em formato YAML + Markdown, começando com o frontmatter ---.`;
+
+  const block=document.getElementById(`prompt-block-${id}`);
+  const pre=document.getElementById(`prompt-pre-${id}`);
+  if(block&&pre){pre.textContent=prompt;block.style.display='block';block.scrollIntoView({behavior:'smooth',block:'nearest'});}
+}
+
+function copyPromptBlock(id){
+  const pre=document.getElementById(`prompt-pre-${id}`);
+  if(pre)navigator.clipboard.writeText(pre.textContent)
+    .then(()=>toast('Prompt copiado! Cole no Claude Cowork.','ok'))
+    .catch(()=>{});
+}
+
+function deleteOutput(id,g){
+  const MB=document.getElementById('modal-bg');const MT=document.getElementById('modal-title');const MP=document.getElementById('modal-text');const MOK=document.getElementById('modal-ok');
+  MT.textContent='Apagar Registro';
+  MP.textContent=`Apagar o registro de output de ${g} para a skill ${id}? Essa ação não pode ser desfeita.`;
+  MOK.className='mbtn mbtn-danger';MOK.textContent='Apagar';
+  pendingAct=async()=>{
+    if(!S.outputs[id])S.outputs[id]={};
+    S.outputs[id][g]={resultado:'',problemas:'',melhoria:'',completude:null,precisao:null,producao:null,feedback:'',saved_at:''};
+    saveLocal();
+    await persistOutput(id,g,S.outputs[id][g]);
+    closeModal();
+    toast('Registro apagado.','warn');
+    const tc=document.getElementById(`colab-tab-${id}`);
+    if(tc)tc.innerHTML=renderOutputRegistro(id);
+    if(S.mode==='controlador')renderMain();
+  };
+  MOK.onclick=pendingAct;MB.classList.add('open');
+}
+
+/* ════════════════════════════════════
+   MODO CONTROLADOR
+════════════════════════════════════ */
+function renderControlador(){
+  const id=S.selected;
+  const content=document.getElementById('content');
+  const sk=id?SKILLS.find(s=>s.id===id):null;
+
+  // Painel geral de controle
+  let html=`
+    <div class="ctrl-panel">
+      <div class="ctrl-section-ttl">Visão Geral · Progresso dos Gestores</div>
+  `;
+
+  // Cards por skill
+  SKILLS.forEach(skill=>{
+    const st=S.skills[skill.id]?.status||'pending';const sm=SM[st];
+    const conf=calcConfidence(skill.id);const concl=gestoresConcluidos(skill.id);
+    const confColor=conf>=80?'var(--grn)':conf>=50?'var(--acc)':'var(--red)';
+    const isExpanded=id===skill.id;
+
+    // Matrix de gestores
+    const matrixRows=skill.gestores.map(g=>{
+      const ph=S.gestorPhases[skill.id]?.[g]||[false,false,false];
+      const dod=S.dod[skill.id]||[false,false,false];
+      const out=S.outputs[skill.id]?.[g]||{};
+      const hasOut=hasOutput(skill.id,g);
+      const phDone=ph.filter(v=>v).length;
+      const dodDoneCount=dod.filter(v=>v).length;
+      const cicloCompleto=ph[0]&&ph[1]&&ph[2]&&hasOut&&dodDone(skill.id);
+      const phColor=phDone===3?'var(--grn)':phDone>0?'var(--acc)':'var(--t3)';
+      const dodColor=dodDoneCount===3?'var(--grn)':dodDoneCount>0?'var(--acc)':'var(--t3)';
+      // Chips de avaliação para a coluna Output
+      const evalChips=[
+        out.completude?`<span style="font-family:var(--mono);font-size:8px;padding:1px 5px;border-radius:2px;background:${out.completude==='completo'?'rgba(46,204,113,.15)':out.completude==='parcial'?'rgba(201,151,26,.15)':'rgba(231,76,60,.15)'};color:${out.completude==='completo'?'var(--grn)':out.completude==='parcial'?'var(--acc)':'var(--red)'};">${out.completude.slice(0,5)}</span>`:'',
+        out.producao!=null?`<span style="font-family:var(--mono);font-size:8px;padding:1px 5px;border-radius:2px;background:${out.producao?'rgba(46,204,113,.15)':'rgba(231,76,60,.15)'};color:${out.producao?'var(--grn)':'var(--red)'};">${out.producao?'prod✓':'prod✕'}</span>`:''
+      ].filter(Boolean).join(' ');
+      return `<tr>
+        <td><span class="g-name-cell">${esc(g)}</span></td>
+        <td><div style="font-family:var(--mono);font-size:10px;font-weight:600;color:${phColor};">${phDone}/3</div></td>
+        <td><div style="font-family:var(--mono);font-size:10px;font-weight:600;color:${dodColor};">${dodDoneCount}/3</div></td>
+        <td>${hasOut?`<div style="display:flex;gap:3px;flex-wrap:wrap;align-items:center;">${evalChips||'<span class="has-output-chip" style="font-size:8px;">✓</span>'}</div>`:`<span class="no-output-chip">—</span>`}</td>
+        <td><div style="font-family:var(--mono);font-size:10px;color:${cicloCompleto?'var(--grn)':'var(--t3)'};">${cicloCompleto?'✓':'—'}</div></td>
+      </tr>`;
+    }).join('');
+
+    html+=`
+      <div class="ctrl-sk-card">
+        <div class="ctrl-sk-card-hdr" onclick="selectSkill('${skill.id}')">
+          <div>
+            <div class="ctrl-sk-name">${esc(skill.cmd)}</div>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:2px;">Ciclo ${skill.ciclo} · ${esc(getCycleDias(skill.id))}</div>
+          </div>
+          <div class="ctrl-sk-meta">
+            <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:${confColor};">${conf}%</span>
+            <div class="badge ${sm.badge}">${sm.l}</div>
+            <div style="font-family:var(--mono);font-size:10px;color:${concl>=4?'var(--grn)':'var(--t2)'};">${concl}/${skill.gestores.length} concluídos</div>
+            <span style="color:var(--t3);font-size:12px;">${isExpanded?'▲':'▼'}</span>
+          </div>
+        </div>
+        ${isExpanded?`
+          <div class="ctrl-sk-body">
+            <div class="ctrl-grid">
+              <!-- Painel de decisão + controles -->
+              <div>
+                <div class="head-controls-wrap">
+                  <div class="head-ctrl-ttl">◈ Controles Head</div>
+                  ${renderHeadControls(skill.id)}
+                </div>
+                <div class="confidence-block">
+                  <div class="conf-ttl">Score de Confiança</div>
+                  <div class="conf-score-row">
+                    <div class="conf-pct" style="color:${confColor};">${conf}%</div>
+                    <div class="conf-bar-wrap"><div class="conf-bar" style="width:${conf}%;background:${confColor};"></div></div>
+                  </div>
+                  <div class="conf-details">Gestores: <span>${concl}/${skill.gestores.length}</span> · DoD: <span>${(S.dod[skill.id]||[]).filter(v=>v).length}/3</span> · Erros críticos: <span>${(S.hallucinations[skill.id]||[]).filter(h=>h.type==='Dados incorretos'||h.type==='Métrica inventada').length}</span></div>
+                  ${concl<4?`<div class="gate-msg">⚠ Mínimo 4 gestores necessário. Atual: ${concl}.</div>`:''}
+                </div>
+              </div>
+              <!-- Tabela comparativa -->
+              <div>
+                <table class="progress-matrix">
+                  <thead><tr><th>Gestor</th><th>Fases</th><th>DoD</th><th>Output / Avaliação</th><th>Concluído</th></tr></thead>
+                  <tbody>${matrixRows}</tbody>
+                </table>
+              </div>
+              <!-- Log de outputs enviados -->
+              <div class="ctrl-grid-full">
+                ${renderOutputsReview(skill.id)}
+              </div>
+
+            </div>
+          </div>
+        `:''}
+      </div>
+    `;
+  });
+
+  // Painel de Veredito — vitrine
+  html+=`
+    <div class="ctrl-section" style="margin-top:20px;">
+      <div class="ctrl-section-ttl">Painel de Veredito</div>
+      <div class="vitrine-grid">
+        ${SKILLS.map(skill=>{
+          const v=S.vereditos?.[skill.id]||'';
+          const st=S.skills[skill.id]?.status||'pending';
+          const sm=SM[st];
+          const concl=gestoresConcluidos(skill.id);
+          const conf=calcConfidence(skill.id);
+          const confColor=conf>=80?'var(--grn)':conf>=50?'var(--acc)':'var(--red)';
+          const vLabel=v==='aprovada'?'✓ Aprovada':v==='ajuste'?'⟳ Ajuste Necessário':v==='bloqueada'?'✕ Bloqueada':'';
+          const vClass=v?`vitrine-veredito vbadge-${v}`:'';
+          return`<div class="vitrine-card${v?' vitrine-card-'+v:''}">
+            <div class="vitrine-card-top">
+              <div class="vitrine-cmd">${esc(skill.cmd)}</div>
+              <div class="badge ${sm.badge}">${sm.l}</div>
+            </div>
+            <div class="vitrine-meta">
+              <span style="font-family:var(--mono);font-size:9px;color:var(--t3);">Ciclo ${skill.ciclo} · ${esc(getCycleDias(skill.id))}</span>
+              <span style="font-family:var(--mono);font-size:10px;font-weight:700;color:${confColor};">${conf}% confiança</span>
+              <span style="font-family:var(--mono);font-size:9px;color:${concl>=4?'var(--grn)':'var(--t3)'};">${concl}/7 auditados</span>
+            </div>
+            ${v?`<div class="${vClass}" style="margin-bottom:8px;">${vLabel}</div>`:''}
+            <div class="vitrine-btns">
+              <button class="vbtn vbtn-aprovada${v==='aprovada'?' vbtn-on':''}" onclick="setVeredito('${skill.id}','aprovada')">✓ Aprovada</button>
+              <button class="vbtn vbtn-ajuste${v==='ajuste'?' vbtn-on':''}" onclick="setVeredito('${skill.id}','ajuste')">⟳ Ajuste</button>
+              <button class="vbtn vbtn-bloqueada${v==='bloqueada'?' vbtn-on':''}" onclick="setVeredito('${skill.id}','bloqueada')">✕ Bloqueada</button>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:10px;">
+      <button class="export-btn" onclick="exportJSON()">↓ Exportar Registros (JSON)</button>
+      <button class="export-btn" onclick="exportCSV()" style="border-color:var(--acc2);background:rgba(201,151,26,.08);color:var(--acc);">↓ Exportar Registros (CSV)</button>
+    </div>
+    </div><!-- /ctrl-panel -->
+  `;
+
+  content.innerHTML=html;
+}
+
+function renderHeadControls(id){
+  const isHead=S.user==='gustavo'||S.user==='amanda';
+  if(!isHead)return`<div style="font-family:var(--mono);font-size:10px;color:var(--t3);">Apenas Gustavo e Amanda.</div>`;
+  const st=S.skills[id]?.status||'pending';
+  const dod=dodDone(id);const concl=gestoresConcluidos(id);const canApprove=dod&&concl>=4;
+  const activeOther=SKILLS.filter(s=>S.skills[s.id]?.status==='active'&&s.id!==id);
+  const wipBlock=activeOther.length>0;
+  const sk=SKILLS.find(s=>s.id===id);const depOk=sk.dep?(S.skills[sk.dep]?.status==='approved'):true;
+  let html='';
+  if(st==='pending'||st==='paused'){
+    html+=`<button class="cbtn cbtn-start" onclick="setStatus('${id}','active')" ${wipBlock||!depOk?'disabled':''}>▶ Iniciar ciclo</button>`;
+    if(wipBlock)html+=`<div class="dod-gate-msg">WIP limit: conclua o ciclo ativo primeiro.</div>`;
+    if(!depOk)html+=`<div class="dod-gate-msg">Dep.: ${esc(SKILLS.find(s=>s.id===sk.dep)?.cmd)} não aprovada.</div>`;
+  }
+  if(st==='active')html+=`<button class="cbtn cbtn-review" onclick="setStatus('${id}','review')">◎ Enviar para revisão</button>`;
+  if(st==='review'||st==='active'){
+    html+=`<button class="cbtn cbtn-approve" onclick="${canApprove?`confirmAct('approve','${id}')`:`showApproveGate('${id}')`}" ${!canApprove?'style="opacity:.5"':''}>✓ Aprovar skill</button>`;
+    if(!dod)html+=`<div class="dod-gate-msg">DoD incompleto.</div>`;
+    if(concl<4)html+=`<div class="dod-gate-msg">Mínimo 4 gestores auditados. Atual: ${concl}.</div>`;
+    html+=`<button class="cbtn cbtn-block" onclick="confirmAct('block','${id}')">✕ Bloquear</button>`;
+  }
+  if(st==='approved')html+=`<div style="font-family:var(--mono);font-size:10px;color:var(--grn);padding:6px 0;">✓ Aprovada e liberada.</div>`;
+  if(st==='blocked')html+=`<button class="cbtn cbtn-start" onclick="setStatus('${id}','paused')">⟳ Mover para Pausada</button>`;
+  html+=`<button class="cbtn cbtn-reset" onclick="confirmAct('reset','${id}')" style="margin-top:4px;">↺ Resetar ciclo</button>`;
+  return html;
+}
+
+/* selectedCtrlGestor = gestor ativo no seletor do controlador */
+let selectedCtrlGestor = {};
+
+function renderOutputsReview(id){
+  const sk=SKILLS.find(s=>s.id===id);
+  const hasAny=sk.gestores.some(g=>hasOutput(id,g));
+  const selG=selectedCtrlGestor[id]||sk.gestores[0];
+  const o=S.outputs[id]?.[selG];
+
+  const gesOpts=sk.gestores.map(g=>{
+    const sent=hasOutput(id,g);
+    return `<option value="${g}" ${selG===g?'selected':''}>${g}${sent?' ✓':''}</option>`;
+  }).join('');
+
+  return`
+    <div>
+      <div class="ctrl-section-ttl" style="margin-bottom:10px;">Outputs dos Gestores</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <label style="font-family:var(--mono);font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;">Ver registro de:</label>
+        <select class="gs-sel" style="max-width:180px;" onchange="selectedCtrlGestor['${id}']=this.value;document.getElementById('ctrl-output-body-${id}').innerHTML=renderOutputBody('${id}',this.value);">${gesOpts}</select>
+        ${!hasAny?'<span style="font-family:var(--mono);font-size:9px;color:var(--t3);">Nenhum output enviado ainda.</span>':''}
+      </div>
+      <div id="ctrl-output-body-${id}">${renderOutputBody(id,selG)}</div>
+    </div>
+  `;
+}
+
+function renderOutputBody(id,g){
+  const o=S.outputs[id]?.[g];
+  if(!o||(!o.resultado&&!o.problemas&&!o.feedback)) return`
+    <div style="padding:24px;text-align:center;background:var(--bg3);border:1px dashed var(--b2);border-radius:3px;">
+      <div style="font-family:var(--mono);font-size:22px;color:var(--t3);">◌</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:8px;">${esc(g)} ainda não enviou registro de output.</div>
+    </div>`;
+  const cuTask=S.skills[id]?.cu_tasks?.[g];
+  // Chips de avaliação
+  const chipCls={completo:'ec-grn',parcial:'ec-acc',incompleto:'ec-red',ok:'ec-grn',impreciso:'ec-acc',inventou:'ec-red'};
+  const evalChips=[
+    o.completude?`<span class="eval-chip ${chipCls[o.completude]||''}">${o.completude==='completo'?'Completo':o.completude==='parcial'?'Parcial':'Incompleto'}</span>`:'',
+    o.precisao?`<span class="eval-chip ${chipCls[o.precisao]||''}">${o.precisao==='ok'?'Dados OK':o.precisao==='impreciso'?'Impreciso':'Inventou'}</span>`:'',
+    o.producao!=null?`<span class="eval-chip ${o.producao?'ec-grn':'ec-red'}">${o.producao?'Produção ✓':'Produção ✕'}</span>`:''
+  ].filter(Boolean).join('');
+  return`
+    <div class="ctrl-output-card">
+      <div class="ctrl-output-card-hdr">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--t1);">◈ ${esc(g)}</span>
+          ${o.saved_at?`<span style="font-family:var(--mono);font-size:9px;color:var(--t3);">salvo em ${esc(o.saved_at)}</span>`:''}
+          ${cuTask?`<a href="${esc(CU.listUrl)}" target="_blank" style="font-family:var(--mono);font-size:8px;color:var(--cyn);padding:1px 6px;border:1px solid var(--cyn2);border-radius:2px;text-decoration:none;">ver task #${esc(cuTask.slice(-6))}</a>`:''}
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          ${evalChips||'<span class="cycle-done-chip">✓ Output Registrado</span>'}
+        </div>
+      </div>
+      ${o.resultado?`
+        <div class="ctrl-output-section">
+          <div class="ctrl-output-lbl">Output gerado pela skill</div>
+          <div class="ctrl-output-body">${esc(o.resultado)}</div>
+        </div>`:''}
+      ${(o.problemas||o.feedback)?`
+        <div class="ctrl-output-section" style="margin-top:10px;">
+          <div class="ctrl-output-lbl" style="color:var(--acc);">Problemas identificados</div>
+          <div class="ctrl-output-body" style="border-left:2px solid var(--acc2);color:var(--t2);">${esc(o.problemas||o.feedback)}</div>
+        </div>`:''}
+      ${o.melhoria?`
+        <div class="ctrl-output-section" style="margin-top:10px;">
+          <div class="ctrl-output-lbl" style="color:var(--cyn);">Sugestão de melhoria do prompt</div>
+          <div class="ctrl-output-body" style="border-left:2px solid var(--cyn2);color:var(--t2);">${esc(o.melhoria)}</div>
+        </div>`:''}
+    </div>`;
+}
+
+function renderAperfeicoamento(id){
+  const sk=SKILLS.find(s=>s.id===id);
+  const logs=S.hallucinations[id]||[];const refinamento=S.skills[id]?.refinamento||'';
+  const entries=logs.length>0?logs.map(h=>`<div class="hall-entry"><div class="hall-hdr"><span class="hall-type">⚠ ${esc(h.type)}</span><span class="hall-date">${esc(h.date)} · ${esc(h.author)}</span></div><div class="hall-text">${esc(h.text)}</div>${h.fix?`<div class="hall-fix">Fix: ${esc(h.fix)}</div>`:''}</div>`).join(''):`<div style="font-family:var(--mono);font-size:10px;color:var(--t3);padding:4px 0;">Nenhum erro registrado.</div>`;
+  return`
+    <div class="ctrl-section-ttl">◈ Aperfeiçoamento IA</div>
+    <div style="background:var(--bg3);border:1px solid var(--b1);border-radius:3px;padding:12px;margin-bottom:8px;">${entries}
+      <div style="font-family:var(--mono);font-size:9px;color:var(--t3);margin:8px 0 5px;text-transform:uppercase;letter-spacing:.1em;">Registrar novo erro</div>
+      <div class="hall-add">
+        <select class="hall-sel" id="hall-type-${id}"><option value="Dados incorretos">Dados incorretos</option><option value="Métrica inventada">Métrica inventada</option><option value="Nicho confundido">Nicho confundido</option><option value="Sugestão inviável">Sugestão inviável</option><option value="Lógica de funil errada">Lógica de funil errada</option><option value="Output incompleto">Output incompleto</option><option value="Outro">Outro</option></select>
+        <textarea class="hall-ta" id="hall-text-${id}" placeholder="Descreva o que a IA errou..."></textarea>
+        <textarea class="hall-ta" id="hall-fix-${id}" placeholder="Sugestão de correção no prompt (opcional)..."></textarea>
+        <button class="hall-submit" onclick="addHallucination('${id}')">+ Registrar erro</button>
+      </div>
+    </div>
+    <div style="background:var(--bg3);border:1px solid var(--b1);border-radius:3px;padding:12px;">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--t3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.1em;">IA Refiner — Gerar SKILL.md Otimizado</div>
+      <textarea class="hall-ta" id="refine-ctx-${id}" style="min-height:45px;" placeholder="Contexto adicional (nicho, CPL esperado, etc.)...">${esc(S.skills[id]?.refineCtx||'')}</textarea>
+      <button class="refine-btn" onclick="gerarRefinamento('${id}')" id="btn-refine-${id}">◈ Gerar SKILL.md Otimizado via Claude</button>
+      <div class="refine-loading" id="refine-loading-${id}">Processando...</div>
+      ${refinamento?`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;margin-bottom:4px;"><span style="font-family:var(--mono);font-size:9px;color:var(--grn);">✓ SKILL.md Otimizado</span><button class="refine-copy-btn" onclick="copyRefinamento('${id}')">Copiar</button></div><pre class="refine-output-pre" id="refine-output-${id}">${esc(refinamento)}</pre>`:`<div id="refine-output-${id}"></div>`}
+    </div>
+  `;
+}
+
+/* ════════════════════════════════════
+   ACTIONS / CONTROLS
+════════════════════════════════════ */
+function showApproveGate(id){const dod=dodDone(id);const concl=gestoresConcluidos(id);let msg='';if(!dod)msg+='• DoD incompleto\n';if(concl<4)msg+=`• Apenas ${concl} gestores auditados (mínimo 4)`;toast('Aprovação bloqueada:\n'+msg,'err');}
+
+async function setStatus(id,status){
+  S.skills[id].status=status;
+  // Captura a data/hora de início do ciclo na primeira ativação
+  if(status==='active' && !S.skills[id].startedAt){
+    S.skills[id].startedAt=new Date().toISOString();
+  }
+  await syncSkillState(id);
+  renderNav();renderStats();
+  if(S.selected===id)renderMain();
+  toast(`Status: ${SM[status].l}`,'ok');
+  if(status==='active') criarTasksClickUp(id);
+}
+
+let pendingAct=null;
+function confirmAct(act,id){
+  const MB=document.getElementById('modal-bg');const MT=document.getElementById('modal-title');const MP=document.getElementById('modal-text');const MOK=document.getElementById('modal-ok');
+  if(act==='approve'){MT.textContent='Aprovar skill';MP.textContent='A skill será liberada para toda a equipe. O prompt refinado foi documentado no Projeto do Claude?';MOK.className='mbtn mbtn-confirm';MOK.textContent='Aprovar';pendingAct=()=>{setStatus(id,'approved');closeModal();};}
+  else if(act==='block'){MT.textContent='Bloquear skill';MP.textContent='Skill marcada como bloqueada.';MOK.className='mbtn mbtn-danger';MOK.textContent='Bloquear';pendingAct=()=>{setStatus(id,'blocked');closeModal();};}
+  else if(act==='reset'){MT.textContent='Resetar ciclo';MP.textContent='Resetará status e progresso dos gestores. Notas e DoD mantidos.';MOK.className='mbtn mbtn-danger';MOK.textContent='Resetar';
+    pendingAct=()=>{S.skills[id].status='pending';S.skills[id].startedAt=null;S.skills[id].cu_tasks={};const sk2=SKILLS.find(s=>s.id===id);sk2.gestores.forEach(g=>{S.gestorPhases[id][g]=[false,false,false];});syncSkillState(id);renderNav();renderStats();if(S.selected===id)renderMain();toast('Ciclo resetado.','warn');closeModal();};}
+  MOK.onclick=pendingAct;MB.classList.add('open');
+}
+function closeModal(){document.getElementById('modal-bg').classList.remove('open');pendingAct=null;}
+
+async function toggleGestorCheck(skillId,gestor,idx){
+  const cur=S.gestorPhases[skillId][gestor]||[false,false,false];cur[idx]=!cur[idx];S.gestorPhases[skillId][gestor]=cur;
+  await syncGestorPhase(skillId,gestor);renderNav();
+  if(S.selected===skillId)renderMain();
+  toast(`${gestor} · ${CHECKLIST_LABELS[idx].lbl} ${cur[idx]?'concluída':'desmarcada'}`,'ok');
+  if(cur[idx]&&gestorConcluiuTudo(skillId,gestor)){
+    await dispararConclusaoClickUp(skillId,gestor);
+  }
+}
+
+async function toggleDod(id,idx){
+  S.dod[id][idx]=!S.dod[id][idx];await syncSkillState(id);
+  if(S.selected===id)renderMain();
+  const g=S.selectedGestor;
+  toast(S.dod[id][idx]?'Critério marcado.':'Desmarcado.','ok');
+  if(S.dod[id][idx]&&gestorConcluiuTudo(id,g)){
+    await dispararConclusaoClickUp(id,g);
+  }
+}
+
+function toggleNote(pid){document.getElementById(pid)?.classList.toggle('open');}
+async function saveNote(id,g,nk){
+  const ta=document.getElementById(`ta_${nk}`);if(!ta)return;
+  if(!S.skills[id].notes)S.skills[id].notes={};S.skills[id].notes[g]=ta.value;
+  await syncGestorPhase(id,g);renderNav();
+  if(S.selected===id)renderMain();toast('Nota salva.','ok');
+}
+
+async function addHallucination(id){
+  const typeEl=document.getElementById(`hall-type-${id}`);const textEl=document.getElementById(`hall-text-${id}`);const fixEl=document.getElementById(`hall-fix-${id}`);
+  if(!textEl||!textEl.value.trim()){toast('Descreva o erro.','warn');return;}
+  const entry={type:typeEl?typeEl.value:'Outro',text:textEl.value.trim(),fix:fixEl?fixEl.value.trim():'',author:S.user==='gustavo'?'Gustavo':S.user==='amanda'?'Amanda':S.selectedGestor,date:new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'})};
+  if(!S.hallucinations[id])S.hallucinations[id]=[];S.hallucinations[id].push(entry);
+  await persistHallucination(id,entry);
+  if(S.selected===id)renderMain();toast('Erro registrado.','ok');
+}
+
+function saveTaskId(id,val){S.skills[id].clickup_task_id=val;saveLocal();}
+function togglePayload(id){const p=document.getElementById(`payload-panel-${id}`);const c=document.getElementById(`payload-code-${id}`);if(!p||!c)return;if(p.classList.contains('open')){p.classList.remove('open');return;}c.textContent=buildPayload(id,'manual_view');p.classList.add('open');}
+function syncClickUp(id){const taskId=S.skills[id]?.clickup_task_id;const st=document.getElementById(`cu-sync-status-${id}`);if(!taskId){toast('Insira o Task ID primeiro.','warn');return;}navigator.clipboard.writeText(buildPayload(id,'sync')).then(()=>{if(st)st.textContent=`✓ ${new Date().toLocaleTimeString('pt-BR')}`;toast('Payload copiado!','ok');}).catch(()=>{});}
+function copyPayload(id){navigator.clipboard.writeText(document.getElementById(`payload-code-${id}`)?.textContent||'').then(()=>toast('Copiado!','ok')).catch(()=>{});}
+
+/* ════════════════════════════════════
+   DECISION BOARD
+════════════════════════════════════ */
+function renderDecs(){
+  const isCtrl=S.mode==='controlador';
+  const logEl=document.getElementById(isCtrl?'dec-log-ctrl':'dec-log');if(!logEl)return;
+  const searchEl=document.getElementById(isCtrl?'dec-search-ctrl':'dec-search');
+  const f=S.decFilter;const search=(searchEl?.value||'').toLowerCase().trim();
+  let list=f==='all'?S.decisions:S.decisions.filter(d=>d.type===f);
+  if(search)list=list.filter(d=>(d.text||'').toLowerCase().includes(search)||(d.skill||'').toLowerCase().includes(search)||(d.author||'').toLowerCase().includes(search));
+  const cnt=document.getElementById('dec-count');if(cnt)cnt.textContent=`(${list.length})`;
+  if(!list.length){logEl.innerHTML=`<div class="empty-dec">${search?'Nenhum resultado para "'+esc(search)+'"':'Nenhuma decisão ainda.'}</div>`;return;}
+  logEl.innerHTML=`<div class="dec-board">`+list.slice().reverse().map(d=>{
+    const dm=DEC_META[d.type]||DEC_META.tecnico;
+    const urgHtml=d.urgency&&d.urgency!=='normal'?`<span class="dec-urg urg-${d.urgency}">${d.urgency==='critica'?'⚠ CRÍTICA':'↑ ALTA'}</span>`:'';
+    const authorColor=d.author==='Gustavo'?'var(--acc)':d.author==='Amanda'?'var(--blu)':'var(--t2)';
+    return`<div class="dec-entry"><div class="dec-timeline-col"><div class="dec-dot-outer ${dm.dotCls}"><div class="dec-dot-inner"></div></div><div class="dec-line"></div></div><div class="dec-card"><div class="dec-card-top"><span class="dec-skill-tag">${esc(d.skill||'Geral')}</span><div class="dec-meta">${urgHtml}<span class="dec-type-chip ${dm.chipCls}">${dm.label}</span></div></div><div class="dec-body">${esc(d.text)}</div><div class="dec-footer"><span class="dec-author">Por <span style="color:${authorColor}">${esc(d.author)}</span></span><span class="dec-date">${esc(d.date)}</span></div></div></div>`;
+  }).join('')+'</div>';
+}
+
+function filterDec(f,el){S.decFilter=f;document.querySelectorAll('.dec-filter').forEach(b=>b.classList.remove('on'));el.classList.add('on');renderDecs();}
+
+async function addDec(){
+  const input=document.getElementById('dec-input');const type=document.getElementById('dec-type')?.value||'tecnico';const urgency=document.getElementById('dec-urgency')?.value||'normal';
+  const txt=input?.value.trim();if(!txt)return;
+  const sk=S.selected?SKILLS.find(s=>s.id===S.selected)?.cmd:null;
+  const dec={text:txt,type,urgency,skill:sk||'Geral',author:S.user==='gustavo'?'Gustavo':S.user==='amanda'?'Amanda':S.selectedGestor,date:new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'})};
+  S.decisions.push(dec);await persistDecision(dec);if(input)input.value='';renderDecs();toast('Decisão registrada.','ok');
+}
+
+/* ════════════════════════════════════
+   IA REFINER
+════════════════════════════════════ */
+async function gerarRefinamento(id){
+  const sk=SKILLS.find(s=>s.id===id);const logs=S.hallucinations[id]||[];
+  const ctx=document.getElementById(`refine-ctx-${id}`)?.value.trim()||'';
+  if(ctx){S.skills[id].refineCtx=ctx;saveLocal();}
+  const btn=document.getElementById(`btn-refine-${id}`);const loading=document.getElementById(`refine-loading-${id}`);
+  if(btn)btn.style.display='none';if(loading)loading.style.display='block';
+  const erros=logs.length>0?logs.map((h,i)=>`${i+1}. [${h.type}] ${h.text}${h.fix?` → Fix: ${h.fix}`:''}`).join('\n'):'Nenhum erro registrado.';
+  const notas=sk.gestores.map(g=>({g,nota:S.skills[id]?.notes?.[g]||''})).filter(x=>x.nota.trim()).map(x=>`• ${x.g}: ${x.nota.trim()}`).join('\n')||'Nenhuma nota registrada.';
+  const original=SKILL_KNOWLEDGE[id]||`Nome: ${sk.cmd}\nObjetivo: ${sk.obj}`;
+  const prompt=`Você é um especialista em criar e aprimorar skills para o Claude no formato SKILL.md, com foco em agências de tráfego pago para saúde médica brasileira (odontologia, cirurgia plástica, saúde metabólica).\n\n## CONTEÚDO ORIGINAL DA SKILL\n${original}\n\n## ERROS REPORTADOS PELOS GESTORES\n${erros}\n\n## NOTAS DE FEEDBACK DOS GESTORES\n${notas}\n\n${ctx?`## CONTEXTO ADICIONAL\n${ctx}`:''}\n\n## TAREFA\nGere uma versão aprimorada do SKILL.md que corrija cada erro identificado com instruções precisas, incorpore o feedback das notas, inclua restrições que previnam os erros e mantenha benchmarks de nicho específicos. Retorne APENAS o conteúdo do SKILL.md, começando com o frontmatter YAML (---).`;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const data=await r.json();const text=data.content?.find(c=>c.type==='text')?.text||'';
+    if(!text)throw new Error('Resposta vazia');
+    S.skills[id].refinamento=text;await syncSkillState(id);
+    toast('SKILL.md otimizado gerado!','ok');if(S.selected===id)renderMain();
+  }catch(e){if(loading)loading.style.display='none';if(btn)btn.style.display='';toast('Erro: '+e.message,'err');}
+}
+function copyRefinamento(id){const pre=document.getElementById(`refine-output-${id}`);if(pre)navigator.clipboard.writeText(pre.textContent).then(()=>toast('SKILL.md copiado!','ok')).catch(()=>{});}
+
+/* ════════════════════════════════════
+   VEREDITO
+════════════════════════════════════ */
+function setVeredito(skillId,v){
+  if(!S.vereditos)S.vereditos={};
+  S.vereditos[skillId]=v; saveLocal();
+  // Persiste no estado da skill via Supabase
+  if(S.skills[skillId])S.skills[skillId].veredito=v;
+  syncSkillState(skillId);
+  // Ações automáticas de status
+  if(v==='aprovada') setStatus(skillId,'approved');
+  else if(v==='bloqueada') setStatus(skillId,'blocked');
+  else if(v==='ajuste') setStatus(skillId,'active');
+  else renderMain();
+  const labels={aprovada:'Aprovada ✓',ajuste:'Ajuste Necessário ⟳',bloqueada:'Bloqueada ✕'};
+  toast(`Veredito registrado: ${labels[v]}`,'ok');
+}
+
+/* ════════════════════════════════════
+   EXPORT
+════════════════════════════════════ */
+function exportJSON(){
+  const data={version:'3.0',exported:new Date().toISOString(),skills:SKILLS.map(sk=>({id:sk.id,cmd:sk.cmd,status:S.skills[sk.id]?.status,outputs:S.outputs[sk.id]||{},notes:S.skills[sk.id]?.notes||{},phases:S.gestorPhases[sk.id]||{},dod:S.dod[sk.id],hallucinations:S.hallucinations[sk.id]||[]})),decisions:S.decisions};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`skillops_export_${new Date().toISOString().split('T')[0]}.json`;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);toast('JSON exportado.','ok');
+}
+function exportCSV(){
+  const rows=[['Skill','Gestor','Output','Feedback','Fase1','Fase2','Fase3','Nota','Data']];
+  SKILLS.forEach(sk=>{sk.gestores.forEach(g=>{const ph=S.gestorPhases[sk.id]?.[g]||[false,false,false];const nota=S.skills[sk.id]?.notes?.[g]||'';const out=S.outputs[sk.id]?.[g];rows.push([sk.cmd,g,out?.resultado||'',out?.feedback||'',ph[0]?'✓':'',ph[1]?'✓':'',ph[2]?'✓':'',nota,out?.saved_at||'']);});});
+  const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`skillops_export_${new Date().toISOString().split('T')[0]}.csv`;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);toast('CSV exportado.','ok');
+}
+
+/* ════════════════════════════════════
+   CLOCK + POLLING + INIT
+════════════════════════════════════ */
+function tick(){const cl=document.getElementById('clock');if(cl)cl.textContent=new Date().toLocaleTimeString('pt-BR');}
+function toast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(type?' '+type:'');clearTimeout(t._t);t._t=setTimeout(()=>{t.className='toast';},2800);}
+
+let pollIv=null;
+
+async function sincronizarDoSupabase(){
+  if(!SB.connected)return;
+  let ch=false;
+  const skSnap=await sbSelect('skill_states','order=updated_at.desc&limit=6');
+  if(skSnap) skSnap.forEach(r=>{
+    const sk=S.skills[r.skill_id];if(!sk)return;
+    if(sk.status!==r.status){sk.status=r.status;ch=true;}
+    const nd=r.dod?JSON.parse(r.dod):[false,false,false];
+    if(JSON.stringify(S.dod[r.skill_id])!==JSON.stringify(nd)){S.dod[r.skill_id]=nd;ch=true;}
+    if(r.cu_tasks){const ct=JSON.parse(r.cu_tasks);if(JSON.stringify(sk.cu_tasks)!==JSON.stringify(ct)){sk.cu_tasks=ct;ch=true;}}
+    if(r.veredito!==undefined){if(!S.vereditos)S.vereditos={};if(S.vereditos[r.skill_id]!==r.veredito){S.vereditos[r.skill_id]=r.veredito||'';ch=true;}}
+  });
+  const phSnap=await sbSelect('gestor_phases','order=updated_at.desc&limit=100');
+  if(phSnap) phSnap.forEach(r=>{
+    if(!S.gestorPhases[r.skill_id])return;
+    const np=r.phases?JSON.parse(r.phases):[false,false,false];
+    if(JSON.stringify(S.gestorPhases[r.skill_id][r.gestor]||[])!==JSON.stringify(np)){S.gestorPhases[r.skill_id][r.gestor]=np;ch=true;}
+    if(!S.skills[r.skill_id].notes)S.skills[r.skill_id].notes={};
+    if((S.skills[r.skill_id].notes[r.gestor]||'')!==(r.note||'')){S.skills[r.skill_id].notes[r.gestor]=r.note||'';ch=true;}
+  });
+  const outSnap=await sbSelect('gestor_outputs','order=updated_at.desc&limit=100');
+  if(outSnap) outSnap.forEach(r=>{
+    if(S.outputs[r.skill_id]===undefined)return;
+    const cur=S.outputs[r.skill_id][r.gestor];
+    if(!cur||cur.resultado!==r.resultado||cur.problemas!==r.problemas){
+      S.outputs[r.skill_id][r.gestor]={resultado:r.resultado||'',problemas:r.problemas||'',melhoria:r.melhoria||'',completude:r.completude||null,precisao:r.precisao||null,producao:r.producao!=null?r.producao:null,feedback:r.feedback||'',saved_at:r.created_at?.slice(0,10)||''};
+      ch=true;
+    }
+  });
+  if(ch){saveLocal();renderNav();renderStats();if(S.selected)renderMain();}
+}
+
+async function initSync(){
+  if(SB.connected){setSBStatus('syncing');await loadFromSupabase();}
+  initSync();
+}
+
+function startPolling(){
+  if(pollIv)return;
+  pollIv=setInterval(sincronizarDoSupabase,5000);
+}
+
+loadLocal();
+setUser(S.user||'gustavo');
+setMode(S.mode||'colaborador');
+renderNav();renderStats();renderDecs();
+tick();setInterval(tick,1000);
+setInterval(()=>{renderStats();renderNav();},5000);
+startPolling();
+</script>
+</body>
+</html>
